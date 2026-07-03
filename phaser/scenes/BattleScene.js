@@ -280,7 +280,11 @@ class BattleScene extends Phaser.Scene {
     // screen effects for the big ones
     if (abilityId === 'limitBreak' || abilityId === 'breakFree') {
       this.cameras.main.flash(300, 255, 255, 255);
-      this.cameras.main.zoomTo(1.12, 150, Phaser.Math.Easing.Quadratic.Out, false, (cam, p) => { if (p === 1) this.cameras.main.zoomTo(1, 260); });
+      // yoyo tween: always returns to zoom 1 even if the battle ends mid-punch
+      this.tweens.add({
+        targets: this.cameras.main, zoom: 1.12, duration: 150, yoyo: true,
+        ease: 'quad.out', onComplete: () => this.cameras.main.setZoom(1)
+      });
     }
 
     // FX anim on target
@@ -370,6 +374,7 @@ class BattleScene extends Phaser.Scene {
   // ── Outcomes ──
   onVictory() {
     this.phase = 'anim';
+    this.cameras.main.setZoom(1); // safety: never end a battle zoomed in
     AudioSystem.sfx(this, 'sfx-limit-break', 0.8);
     // death FX chain on boss
     for (let i = 0; i < 4; i++) {
@@ -403,6 +408,7 @@ class BattleScene extends Phaser.Scene {
 
   onDefeat() {
     this.phase = 'anim';
+    this.cameras.main.setZoom(1);
     const sparkLines = T_(this.game, 'gameOverSpark');
     this.showDialogue(T_(this.game, 'speakerSpark'), Array.isArray(sparkLines) ? sparkLines : [sparkLines], () => {
       AudioSystem.stopMusic(this);
