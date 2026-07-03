@@ -1,0 +1,76 @@
+/* ============================================================
+   BRAVE ENOUGH — style.css
+   Pixel-art JRPG styling. No external resources.
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  overflow: hidden;
+  font-family: monospace;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Canvas container ── */
+#canvasWrap {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+#gameCanvas {
+  display: block;
+  /* Logical resolution 480×320; CSS scales up 3× → 1440×960 max, clamped by viewport */
+  width: min(1440px, 100vw, calc(100vh * 1.5));
+  height: auto;
+  aspect-ratio: 480 / 320;
+
+  /* Crisp pixel art scaling — no blur */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  image-rendering: -moz-crisp-edges;
+
+  cursor: default;
+}
+
+/* ── Scanline overlay ── */
+#scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.18) 2px,
+    rgba(0, 0, 0, 0.18) 4px
+  );
+  /* scale the scanlines at the same ratio as the canvas */
+  background-size: 100% 4px;
+  mix-blend-mode: multiply;
+  border-radius: 2px;
+}
+
+/* ── Vignette ── */
+#vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}

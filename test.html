@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eres más fuerte — Regression Test</title>
+  <style>
+    body { background: #111; color: #eee; font-family: monospace; padding: 20px; }
+    h1 { color: #FFD700; font-size: 18px; }
+    h2 { color: #00C2B5; font-size: 14px; margin-top: 24px; border-bottom: 1px solid #333; padding-bottom: 4px; }
+    .suite { margin-bottom: 8px; }
+    .pass { color: #44FF88; }
+    .fail { color: #FF4444; }
+    .info { color: #AAAAAA; }
+    .warn { color: #FFAA44; }
+    #status { font-size: 13px; color: #888; margin-bottom: 20px; }
+    button {
+      background: #222; color: #eee; border: 1px solid #555;
+      padding: 6px 12px; margin: 4px; cursor: pointer; font-family: monospace;
+      font-size: 12px; border-radius: 3px;
+    }
+    button:hover { background: #333; border-color: #00C2B5; }
+    button:active { background: #00C2B5; color: #000; }
+    #results { font-size: 13px; line-height: 1.8; }
+    #summary { margin-top: 20px; font-size: 14px; font-weight: bold; }
+    #ctx-debug { background: #1a1a1a; border: 1px solid #333; padding: 8px; margin-top: 8px; font-size: 12px; }
+    .section-sounds { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }
+    #unlock-notice {
+      background: #1a1000; border: 1px solid #FFAA44; padding: 12px; margin-bottom: 16px;
+      font-size: 13px; display: block;
+    }
+  </style>
+</head>
+<body>
+  <h1>Eres más fuerte — Regression Test</h1>
+  <div id="unlock-notice">
+    ⚠ <strong>Click anywhere or press any key first</strong> to unlock audio (browser policy).
+    Then run tests or press sound buttons.
+  </div>
+  <div id="status">Status: waiting for user gesture…</div>
+  <div id="results"></div>
+  <div id="summary"></div>
+
+  <!-- Load game scripts -->
+  <script src="translations.js"></script>
+  <script src="sounds.js"></script>
+
+  <script>
+  'use strict';
+
+  // ── Unlock AudioContext on first gesture ──────────────────
+  let audioUnlocked = false;
+
+  function unlockAudio() {
+    if (!audioUnlocked) {
+      SFX.resume();
+      audioUnlocked = true;
+      document.getElementById('status').textContent = 'Status: audio unlocked — running tests…';
+      document.getElementById('status').style.color = '#44FF88';
+      document.getElementById('unlock-notice').style.display = 'none';
+      runAllTests();
+    }
+  }
+
+  window.addEventListener('keydown', unlockAudio, { once: true });
+  window.addEventListener('click',   unlockAudio, { once: true });
+
+  // ── Test helpers ──────────────────────────────────────────
+  const results = [];
+  let passCount = 0, failCount = 0;
+
+  function assert(name, condition, detail) {
+    const ok = !!condition;
+    if (ok) passCount++; else failCount++;
+    results.push({ ok, name, detail: detail || '' });
+  }
+
+  function assertEq(name, actual, expected) {
+    const ok = actual === expected;
+    if (ok) passCount++; else failCount++;
+    results.push({ ok, name, detail: ok ? '' : `expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}` });
+  }
+
+  function render() {
+    const el = document.getElementById('results');
+    el.innerHTML = results.map(r =>
+      `<div class="suite">
+        <span class="${r.ok ? 'pass' : 'fail'}">${r.ok ? '✓' : '✗'}</span>
+        <span> ${r.name}</span>
+        ${r.detail ? `<span class="${r.ok ? 'info' : 'fail'}"> — ${r.detail}</span>` : ''}
+      </div>`
+    ).join('');
+
+    const sum = document.getElementById('summary');
+    const total = passCount + failCount;
+    sum.className = failCount === 0 ? 'pass' : 'fail';
+    sum.textContent = `${passCount}/${total} passed${failCount > 0 ? ` — ${failCount} FAILED` : ' ✓'}`;
+
+    // Ctx debug info
+    const dbg = SFX.debugState();
+    const dbgEl = document.getElementById('ctx-debug') || (() => {
+      const d = document.createElement('div');
+      d.id = 'ctx-debug';
+      sum.after(d);
+      return d;
+    })();
+    dbgEl.innerHTML = `AudioContext state: <strong>${dbg.contextState}</strong> | ready: <strong>${dbg.ready}</strong> | queued: <strong>${dbg.queued}</strong> | muted: <strong>${dbg.muted}</strong>`;
+  }
+
+  // ── Test suites ───────────────────────────────────────────
+
+  function testApiSurface() {
+    const fns = [
+      'resume','toggleMute','isMuted','debugState',
+      'menuMove','menuConfirm','menuBack',
+      'typeChar','dialogueAdvance',
+      'fadeTransition','levelIntroAppear',
+      'playerAttack','playerHeal','playerHurt',
+      'bossAttack','bossHurt','bigAttack','statusEffect',
+      'bossDefeated','levelClear','abilityUnlock','gameOver','finalVictory',
+      'sparkAppear','sparkSpeak',
+    ];
+    for (const fn of fns) {
+      assert(`SFX.${fn} is a function`, typeof SFX[fn] === 'function');
+    }
+  }
+
+  function testMuteToggle() {
+    // Should start unmuted
+    assertEq('isMuted() starts false', SFX.isMuted(), false);
+
+    // Toggle on
+    const r1 = SFX.toggleMute();
+    assertEq('toggleMute() returns true (muted)', r1, true);
+    assertEq('isMuted() is true after mute', SFX.isMuted(), true);
+
+    // Toggle off
+    const r2 = SFX.toggleMute();
+    assertEq('toggleMute() returns false (unmuted)', r2, false);
+    assertEq('isMuted() is false after unmute', SFX.isMuted(), false);
+
+    // Three toggles → should be true
+    SFX.toggleMute(); SFX.toggleMute(); SFX.toggleMute();
+    assertEq('three toggles → muted=true', SFX.isMuted(), true);
+    // Reset
+    SFX.toggleMute();
+    assertEq('fourth toggle → muted=false (reset)', SFX.isMuted(), false);
+  }
+
+  function testTypeCharThrottle() {
+    // typeChar should play only every 3rd call.
+    // We can't hear it in test, but we can call it 9 times without error.
+    let threw = false;
+    try {
+      for (let i = 0; i < 9; i++) SFX.typeChar();
+    } catch (e) {
+      threw = true;
+    }
+    assert('typeChar() runs 9 times without error', !threw);
+  }
+
+  function testAudioContextUnlock() {
+    const dbg = SFX.debugState();
+    // After user gesture + resume(), context should be running or about to be.
+    assert(
+      'AudioContext created after resume()',
+      dbg.contextState !== 'not created',
+      `state=${dbg.contextState}`
+    );
+    // Give the async resume a moment, then check
+    setTimeout(() => {
+      const dbg2 = SFX.debugState();
+      assert(
+        'AudioContext state is "running" within 500ms',
+        dbg2.contextState === 'running',
+        `actual state: ${dbg2.contextState}`
+      );
+      assert(
+        'SFX._ready flag is true after unlock',
+        dbg2.ready === true,
+        `ready=${dbg2.ready}`
+      );
+      assert(
+        'No sounds stuck in queue after unlock',
+        dbg2.queued === 0,
+        `queued=${dbg2.queued}`
+      );
+      render();
+      renderSoundButtons();
+    }, 500);
+  }
+
+  function testSoundCallsNoCrash() {
+    const calls = [
+      ['menuMove'],
+      ['menuConfirm'],
+      ['menuBack'],
+      ['dialogueAdvance'],
+      ['fadeTransition'],
+      ['levelIntroAppear'],
+      ['playerAttack'],
+      ['playerHeal'],
+      ['playerHurt'],
+      ['bossAttack'],
+      ['bossHurt'],
+      ['bigAttack'],
+      ['statusEffect'],
+      // Note: these play sequences so skip in batch to avoid audio overload
+      // ['bossDefeated'],
+      // ['levelClear'],
+      // ['abilityUnlock'],
+      // ['gameOver'],
+      // ['finalVictory'],
+      ['sparkAppear'],
+      ['sparkSpeak'],
+    ];
+
+    for (const [fn] of calls) {
+      let threw = false;
+      try { SFX[fn](); } catch (e) { threw = true; }
+      assert(`SFX.${fn}() does not throw`, !threw);
+    }
+  }
+
+  function testMutedSoundsSkip() {
+    // While muted, calling sound functions should not create AudioContext nodes.
+    // We verify this doesn't throw and muted flag is respected.
+    SFX.toggleMute(); // mute
+    assert('isMuted() true before muted test', SFX.isMuted());
+    let threw = false;
+    try {
+      SFX.menuMove();
+      SFX.menuConfirm();
+      SFX.playerAttack();
+    } catch (e) { threw = true; }
+    assert('Sound calls while muted do not throw', !threw);
+    SFX.toggleMute(); // unmute
+    assertEq('isMuted() false after re-unmute', SFX.isMuted(), false);
+  }
+
+  function testTranslationsLoaded() {
+    // Verify translations.js loaded and has expected structure.
+    assert('TRANSLATIONS object exists', typeof TRANSLATIONS !== 'undefined');
+    assert('TRANSLATIONS.es exists', TRANSLATIONS && typeof TRANSLATIONS.es === 'object');
+    assert('TRANSLATIONS.en exists', TRANSLATIONS && typeof TRANSLATIONS.en === 'object');
+    const es = TRANSLATIONS.es;
+    assert('es.gameTitle is "ERES MÁS FUERTE"', es && es.gameTitle === 'ERES MÁS FUERTE');
+    assert('es.victoryBigText starts with ¡', es && es.victoryBigText && es.victoryBigText.startsWith('¡'));
+  }
+
+  // ── Manual sound buttons ──────────────────────────────────
+  function renderSoundButtons() {
+    const existing = document.getElementById('sound-buttons');
+    if (existing) return; // already rendered
+
+    const container = document.createElement('div');
+    container.id = 'sound-buttons';
+    container.innerHTML = `
+      <h2>Manual Sound Test — click each to verify audio</h2>
+      <p class="info" style="font-size:12px">Each button should produce a distinct sound. ✓ = heard it. ✗ = silent/broken.</p>
+    `;
+
+    const groups = [
+      { label: 'UI', fns: ['menuMove','menuConfirm','menuBack'] },
+      { label: 'Dialogue', fns: ['typeChar','dialogueAdvance'] },
+      { label: 'Transitions', fns: ['fadeTransition','levelIntroAppear'] },
+      { label: 'Battle', fns: ['playerAttack','playerHeal','playerHurt','bossAttack','bossHurt','bigAttack','statusEffect'] },
+      { label: 'Victory & Defeat', fns: ['bossDefeated','levelClear','abilityUnlock','gameOver','finalVictory'] },
+      { label: 'Spark', fns: ['sparkAppear','sparkSpeak'] },
+    ];
+
+    for (const group of groups) {
+      const div = document.createElement('div');
+      div.innerHTML = `<h2>${group.label}</h2><div class="section-sounds">`;
+      for (const fn of group.fns) {
+        const btn = document.createElement('button');
+        btn.textContent = fn;
+        btn.onclick = () => {
+          SFX.resume();
+          SFX[fn]();
+          btn.style.borderColor = '#44FF88';
+        };
+        div.querySelector('.section-sounds').appendChild(btn);
+      }
+      container.appendChild(div);
+    }
+
+    // Mute test button
+    const muteDiv = document.createElement('div');
+    muteDiv.innerHTML = `<h2>Mute Toggle</h2>`;
+    const muteBtn = document.createElement('button');
+    muteBtn.textContent = 'Toggle Mute (M)';
+    muteBtn.onclick = () => {
+      const now = SFX.toggleMute();
+      muteBtn.textContent = now ? '♪ MUTED — click to unmute' : '♪ SOUND ON — click to mute';
+      muteBtn.style.borderColor = now ? '#FF4444' : '#44FF88';
+      SFX.menuMove(); // should be silent if muted
+    };
+    muteDiv.appendChild(muteBtn);
+    container.appendChild(muteDiv);
+
+    // typeChar spam test
+    const tcDiv = document.createElement('div');
+    tcDiv.innerHTML = `<h2>typeChar throttle</h2>
+      <p class="info" style="font-size:12px">Should hear 1 blip per 3 clicks (every 3rd call plays).</p>`;
+    for (let i = 0; i < 6; i++) {
+      const btn = document.createElement('button');
+      btn.textContent = `char ${i+1}`;
+      btn.onclick = () => { SFX.resume(); SFX.typeChar(); };
+      tcDiv.appendChild(btn);
+    }
+    container.appendChild(tcDiv);
+
+    // Debug live state
+    const debugDiv = document.createElement('div');
+    debugDiv.innerHTML = `<h2>Live AudioContext Debug</h2>`;
+    const debugBtn = document.createElement('button');
+    debugBtn.textContent = 'Refresh debug state';
+    debugBtn.onclick = () => {
+      const d = SFX.debugState();
+      document.getElementById('ctx-debug').innerHTML =
+        `AudioContext state: <strong>${d.contextState}</strong> | ready: <strong>${d.ready}</strong> | queued: <strong>${d.queued}</strong> | muted: <strong>${d.muted}</strong>`;
+    };
+    debugDiv.appendChild(debugBtn);
+    container.appendChild(debugDiv);
+
+    document.body.appendChild(container);
+  }
+
+  // ── Run all tests ─────────────────────────────────────────
+  function runAllTests() {
+    // Reset counters
+    results.length = 0;
+    passCount = 0;
+    failCount = 0;
+
+    // Sync tests (run immediately)
+    testApiSurface();
+    testMuteToggle();
+    testTypeCharThrottle();
+    testSoundCallsNoCrash();
+    testMutedSoundsSkip();
+    testTranslationsLoaded();
+
+    // Render sync results immediately
+    render();
+
+    // Async test: AudioContext unlock (waits 500ms for ctx.resume() to resolve)
+    testAudioContextUnlock();
+    // render() is called again inside testAudioContextUnlock after 500ms
+  }
+  </script>
+</body>
+</html>

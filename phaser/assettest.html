@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Asset Test — Brave Enough</title>
+<style>body{background:#1a1a2e;margin:0} canvas{image-rendering:pixelated}</style>
+</head>
+<body>
+<script src="lib/phaser.min.js"></script>
+<script>
+// Visual regression page for P0: every curated sheet loads, animates at its
+// measured frame size, and is labeled. Garbled art here = wrong frame size.
+const SHEETS = [
+  { key: 'hero',        url: 'assets/sprites/hero.png',            fw: 32,  fh: 32,  frames: 12, animEnd: 3 },
+  { key: 'npc-guy',     url: 'assets/sprites/npc-guy.png',         fw: 32,  fh: 32,  frames: 12, animEnd: 3 },
+  { key: 'npc-girl',    url: 'assets/sprites/npc-girl.png',        fw: 32,  fh: 32,  frames: 12, animEnd: 3 },
+  { key: 'npc-robot',   url: 'assets/sprites/npc-robot.png',       fw: 16,  fh: 16,  frames: 5,  animEnd: 4 },
+  { key: 'adam-run',    url: 'assets/sprites/modern/adam-run.png', fw: 16,  fh: 32,  frames: 24, animEnd: 5 },
+  { key: 'amelia-idle', url: 'assets/sprites/modern/amelia-idle.png', fw: 16, fh: 32, frames: 24, animEnd: 5 },
+  { key: 'boss-pluma',  url: 'assets/sprites/boss-pluma-roja.png', fw: 55,  fh: 93,  frames: 5,  animEnd: 4 },
+  { key: 'boss-cotilleo', url: 'assets/sprites/boss-cotilleo.png', fw: 112, fh: 128, frames: 5,  animEnd: 4 },
+  { key: 'boss-foco',   url: 'assets/sprites/boss-foco.png',       fw: 80,  fh: 80,  frames: 1,  animEnd: 0 },
+  { key: 'boss-panico', url: 'assets/sprites/boss-panico.png',     fw: 101, fh: 98,  frames: 6,  animEnd: 5 },
+  { key: 'boss-ansiedad', url: 'assets/sprites/boss-ansiedad.png', fw: 112, fh: 153, frames: 5,  animEnd: 4 },
+  { key: 'fx-hit',      url: 'assets/fx/hit.png',                  fw: 31,  fh: 32,  frames: 3,  animEnd: 2 },
+  { key: 'fx-death',    url: 'assets/fx/enemy-death.png',          fw: 48,  fh: 48,  frames: 8,  animEnd: 7 },
+  { key: 'fx-explosion', url: 'assets/fx/explosion.png',           fw: 32,  fh: 32,  frames: 8,  animEnd: 7 },
+  { key: 'fx-shield',   url: 'assets/fx/energy-shield.png',        fw: 51,  fh: 47,  frames: 8,  animEnd: 7 },
+  { key: 'fx-electro',  url: 'assets/fx/electro-shock.png',        fw: 128, fh: 96,  frames: 9,  animEnd: 8 },
+  { key: 'fx-fireball', url: 'assets/fx/fire-ball.png',            fw: 52,  fh: 29,  frames: 3,  animEnd: 2 },
+  { key: 'fx-smack',    url: 'assets/fx/energy-smack.png',         fw: 128, fh: 96,  frames: 8,  animEnd: 7 },
+  { key: 'fx-slash',    url: 'assets/fx/slash-circular.png',       fw: 52,  fh: 48,  frames: 6,  animEnd: 5 },
+];
+const IMAGES = [
+  { key: 'tiles-overworld', url: 'assets/tiles/overworld.png' },
+  { key: 'tiles-town',      url: 'assets/tiles/town.png' },
+  { key: 'tiles-dungeon',   url: 'assets/tiles/dungeon.png' },
+  { key: 'tiles-stage',     url: 'assets/tiles/stage.png' },
+  { key: 'tiles-interiors', url: 'assets/tiles/interiors.png' },
+  { key: 'tiles-room',      url: 'assets/tiles/room-builder.png' },
+  { key: 'parallax-back',   url: 'assets/ui/parallax-back.png' },
+  { key: 'parallax-middle', url: 'assets/ui/parallax-middle.png' },
+  { key: 'parallax-front',  url: 'assets/ui/parallax-front.png' },
+];
+const MUSIC = ['title', 'world', 'battle', 'boss-final'];
+const SFX = ['menu-move','menu-select','menu-cancel','menu-error','blip','hit','zap','heal','buff','debuff','limit-break','boss-hit','unlock','footstep','door'];
+
+new Phaser.Game({
+  type: Phaser.AUTO, width: 1280, height: 900, pixelArt: true, backgroundColor: '#16213e',
+  scene: {
+    preload() {
+      this.load.on('loaderror', f => console.error('LOAD ERROR:', f.key, f.url));
+      SHEETS.forEach(s => this.load.spritesheet(s.key, s.url, { frameWidth: s.fw, frameHeight: s.fh }));
+      IMAGES.forEach(i => this.load.image(i.key, i.url));
+      MUSIC.forEach(m => this.load.audio('m-' + m, ['assets/audio/music/' + m + '.ogg', 'assets/audio/music/' + m + '.m4a']));
+      SFX.forEach(s => this.load.audio('s-' + s, ['assets/audio/sfx/' + s + '.ogg']));
+    },
+    create() {
+      let x = 60, y = 70;
+      SHEETS.forEach(s => {
+        if (s.frames > 1) {
+          this.anims.create({ key: 'a-' + s.key, frames: this.anims.generateFrameNumbers(s.key, { start: 0, end: s.animEnd }), frameRate: 8, repeat: -1 });
+          this.add.sprite(x, y, s.key).play('a-' + s.key).setScale(Math.min(2, 120 / Math.max(s.fw, s.fh)));
+        } else {
+          this.add.image(x, y, s.key);
+        }
+        this.add.text(x, y + 70, s.key, { fontSize: '10px', color: '#8ff' }).setOrigin(0.5, 0);
+        x += 130; if (x > 1200) { x = 60; y += 160; }
+      });
+      x = 60; y += 200;
+      IMAGES.forEach(i => {
+        this.add.image(x, y, i.key).setDisplaySize(120, 100);
+        this.add.text(x, y + 55, i.key, { fontSize: '10px', color: '#ff8' }).setOrigin(0.5, 0);
+        x += 130;
+      });
+      const status = this.add.text(20, 10, 'Audio: click anywhere to test music + a sfx. Loaded ' + (SHEETS.length + IMAGES.length) + ' textures, ' + (MUSIC.length + SFX.length) + ' sounds.', { fontSize: '14px', color: '#fff' });
+      this.input.once('pointerdown', () => {
+        this.sound.play('m-title', { volume: 0.4 });
+        this.sound.play('s-menu-select');
+        status.setText('Playing m-title + s-menu-select. No errors in console = P0 pass.');
+      });
+      console.log('ASSETTEST CREATE OK — textures:', Object.keys(this.textures.list).length);
+    }
+  }
+});
+</script>
+</body>
+</html>

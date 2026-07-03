@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><style>body{background:#223;color:#fff;font:10px monospace} canvas{image-rendering:pixelated;display:block;margin:8px 0}</style></head>
+<body>
+<div>?sheet=interiors|room-builder &amp; ?from=ROW — grid with row:col labels, 3x zoom</div>
+<canvas id="c"></canvas>
+<script>
+const params = new URLSearchParams(location.search);
+const sheet = params.get('sheet') || 'interiors';
+const from = parseInt(params.get('from') || '0', 10);
+const ROWS = 16; // rows shown per page
+const img = new Image();
+img.src = 'assets/tiles/' + sheet + '.png';
+img.onload = () => {
+  const Z = parseInt(params.get('z') || '2', 10), T = 16;
+  const cols = Math.floor(img.width / T);
+  const rows = Math.min(ROWS, Math.floor(img.height / T) - from);
+  const c = document.getElementById('c');
+  c.width = cols * T * Z + 40; c.height = rows * T * Z + 20;
+  const g = c.getContext('2d');
+  g.imageSmoothingEnabled = false;
+  g.fillStyle = '#334'; g.fillRect(0, 0, c.width, c.height);
+  g.drawImage(img, 0, from * T, cols * T, rows * T, 40, 20, cols * T * Z, rows * T * Z);
+  g.strokeStyle = 'rgba(255,0,0,.4)'; g.fillStyle = '#ff0';
+  for (let x = 0; x <= cols; x++) {
+    g.beginPath(); g.moveTo(40 + x * T * Z, 20); g.lineTo(40 + x * T * Z, c.height); g.stroke();
+    if (x < cols) g.fillText(x, 40 + x * T * Z + 14, 12);
+  }
+  for (let y = 0; y <= rows; y++) {
+    g.beginPath(); g.moveTo(40, 20 + y * T * Z); g.lineTo(c.width, 20 + y * T * Z); g.stroke();
+    if (y < rows) g.fillText('r' + (from + y), 2, 20 + y * T * Z + 26);
+  }
+};
+</script>
+</body>
+</html>
