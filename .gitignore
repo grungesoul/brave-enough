@@ -1,4 +1,4 @@
 .DS_Store
-# Raw downloaded asset packs — only curated copies in phaser/assets/ ship
-Assets/
+# Raw downloaded asset packs (root only) — curated copies in phaser/assets/ DO ship
+/Assets/
 .claude/
