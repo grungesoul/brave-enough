@@ -426,7 +426,7 @@ const TRANSLATIONS = {
   es: {
     // ── UI ────────────────────────────────────────────────
     gameTitle: 'ERES MÁS FUERTE',
-    subtitle: 'Un viaje hacia adentro',
+    subtitle: 'Un viaje hacia dentro',
     tagline: '"No hace falta dejar de tener miedo. Solo hay que seguir."',
     pressStart: '— PULSA ENTER O HAZ CLIC PARA EMPEZAR —',
     namePrompt: 'Oye, ¿cómo te llamas?',
@@ -464,10 +464,10 @@ const TRANSLATIONS = {
     resultSpeakUpHeard: (dmg) => `¡Te han escuchado! ${dmg} de daño. ¡El enemigo lo ha notado!`,
     resultReframe: (dmg) => `¡Lo has reencuadrado! ${dmg} de daño. Pavor -10.`,
     resultReframeLonger: '¡Reencuadrado! El pavor sigue bajando.',
-    resultFindPeople: (dmg) => `¡Ha llegado tu colega! ${dmg} de daño. +10 CV!`,
-    resultBelieve: (dmg) => `¡Te lo has creído! ${dmg} de daño. +20 CV!`,
-    resultBelieveInspired: (dmg) => `¡Te lo has creído! ${dmg} de daño. +20 CV. ¡Inspirado!`,
-    resultBreakFree: (dmg) => `¡A por todas! ${dmg} de daño!`,
+    resultFindPeople: (dmg) => `¡Ha llegado tu colega! ${dmg} de daño. ¡+10 CV!`,
+    resultBelieve: (dmg) => `¡Te lo has creído! ${dmg} de daño. ¡+20 CV!`,
+    resultBelieveInspired: (dmg) => `¡Te lo has creído! ${dmg} de daño. ¡+20 CV! ¡Inspirado!`,
+    resultBreakFree: (dmg) => `¡A por todas! ¡${dmg} de daño!`,
     resultDesperateCourage: (dmg) => `¡VALENTÍA SIN FRENOS! ¡${dmg} de daño!`,
     resultLimitBreak: (dmg) => `¡SIN MIEDO! ${dmg} de daño. ¡Estados negativos eliminados!`,
     mirrorAdapts: (abilityName) => `El espejo te copia. Tu ${abilityName} se debilita.`,
@@ -485,7 +485,7 @@ const TRANSLATIONS = {
       believeInYourself: { name: 'Confía en Ti',      desc: 'Ataque fuerte + recupera 20 CV. (15 Calma)' },
       breakFree:         { name: 'A por Todas',       desc: 'Golpe definitivo. Bono si CV < 30. (20 Calma)' },
       groundYourself:    { name: 'Aquí y Ahora',      desc: '5-4-3-2-1. Restaura 20 Calma + 10 CV. (Gratis, recarga 3)' },
-      selfTalk:          { name: 'Hazte la Cabeza',   desc: 'Cuestiona el pensamiento. Daño medio + debilita rival. (8 Calma)' },
+      selfTalk:          { name: 'Rebátelo',          desc: 'Cuestiona el pensamiento. Daño medio + debilita rival. (8 Calma)' },
       selfCompassion:    { name: 'Date un Respiro',   desc: 'Recupera 35 CV + ataque suave. (15 Calma)' },
       powerPose:         { name: 'Postura de Poder',  desc: 'Ataque + Inspirado 3 turnos. (8 Calma, recarga 3)' },
       limitBreak:        { name: 'Sin Miedo',          desc: '¡Límite roto! Daño masivo, elimina estados negativos. Se carga cada 4 turnos. (Gratis)' },
@@ -540,7 +540,7 @@ const TRANSLATIONS = {
       3: [
         'El telón está a punto de subir.',
         'Ahí están todos. Todo lo que alguna vez te ha dado miedo, esperando.',
-        'Esta noche, con solo salir ya está.'
+        'Esta noche, solo con salir ya lo has conseguido.'
       ],
       4: [
         'Ya no hay más salas. Ya no hay más gente.',
@@ -558,12 +558,12 @@ const TRANSLATIONS = {
       // Level 1 — La Pluma Roja
       [
         '"Tengo apuntados todos tus fallos en esta aula. Todos. Sin excepción."',
-        '"Estudiaste, ¿a que sí? Y aun así no es suficiente. Nunca va a ser suficiente."',
+        '"Has estudiado, ¿a que sí? Y aun así no es suficiente. Nunca va a ser suficiente."',
         '"¿Qué van a pensar cuando vean tu nota? ¿Qué dice eso de ti?"'
       ],
       // Level 2 — El Cotilleo
       [
-        '"Te estaban mirando en el pasillo. ¿Lo notaste? Todos. Justo a ti."',
+        '"Te estaban mirando en el pasillo. ¿Te has dado cuenta? Todos. Justo a ti."',
         '"¿Y qué vas a hacer, hablar? Genial. Dales más de qué cotillear."',
         '"Aunque me ganes hoy, van a seguir mirando. Siempre estarán mirando."'
       ],
@@ -629,18 +629,18 @@ const TRANSLATIONS = {
       // Level 1
       [ '"Incorrecto."', '"Voy a mostrarte todos los fallos que has cometido."', '"Se ha acabado el tiempo. No estabas listo. Nunca lo estarás."' ],
       // Level 2
-      [ '"¿Has oído lo que están diciendo de ti? No es bueno."', '"Todo. El. Mundo. Te. Está. Mirando."', '"No puedes con lo que todos ya saben."' ],
+      [ '"¿Has oído lo que están diciendo de ti? No es bueno."', '"Todo. El. Mundo. Te. Está. Mirando."', '"No puedes huir de lo que ya sabe todo el mundo."' ],
       // Level 3
       [ '"Ahora todos te pueden ver. Todo."', '"Eso. Justo eso. ¿Pensabas que nadie se iba a dar cuenta?"', '"No hay dónde esconderse. Lo veo todo."' ],
       // Level 4
       [ '"Las piernas no te responden. Todos te están viendo ahí plantado."', '"El texto se ha ido. Todo se ha ido. Solo tú y un montón de ojos esperando."', '"Tu actuación ha terminado. En realidad nunca llegó a empezar."' ],
       // Level 5
-      [ '"¿Y si ya has gastado todo lo que tenías? ¿Y si no te queda suficiente?"', '"Sabías que iba a pasar. Tenías que haberte preparado más. Nunca estás suficientemente listo."', '"¿Te acuerdas del examen? ¿Del pasillo? ¿La pista? ¿El escenario? No lo vas a olvidar."', '"Si me voy — ¿qué eres sin mí? Toda tu vida he estado aquí."' ],
+      [ '"¿Y si ya has gastado todo lo que tenías? ¿Y si no te queda suficiente?"', '"Sabías que iba a pasar. Tenías que haberte preparado más. Nunca estás suficientemente listo."', '"¿Te acuerdas del examen? ¿Del pasillo? ¿De la pista? ¿Del escenario? No lo vas a olvidar."', '"Si me voy — ¿qué eres sin mí? Toda tu vida he estado aquí."' ],
     ],
 
     // ── Spark intro lines ─────────────────────────────────
     sparkIntros: [
-      'Esta sala lleva tiempo en tu cabeza, ¿verdad? Ya toca limpiarlo.',
+      'Esta sala lleva tiempo en tu cabeza, ¿verdad? Ya toca limpiarla.',
       'Conozco este sitio. Es el que te hace sentir que todo va de ti. Sigue, no te rajes.',
       'Están todos aquí. Cada cara a la que no querías fallar. Pero mira — el suelo está firme. Todavía puedes sostenerte.',
       'Sé que este es el más duro. Las dos cosas a la vez — hacer y que te vean. Pero este escenario es tuyo. Nadie te lo puede quitar.',
@@ -705,7 +705,7 @@ const TRANSLATIONS = {
         '"Como me equivoque, van a saber que no pinto nada aquí."',
         '"Lo van a ver. Todos van a saber que llevo tiempo haciéndome el que sabe."',
         '...',
-        '"...¿Tú también lo piensas de ti mismo?"'
+        '"...¿Tú también piensas eso de ti?"'
       ],
       l1n2: [
         '"Infracción registrada. Respuesta incorrecta, página tres. Enfoque incorrecto, pregunta siete."',
@@ -720,7 +720,7 @@ const TRANSLATIONS = {
       // Level 2 — El Pasillo
       l2n1: [
         'SOMBRA A: "Oye, ¿has visto que —"',
-        'SOMBRA B: "— sí, yo también lo vi —"',
+        'SOMBRA B: "— sí, yo también lo he visto —"',
         'SOMBRA A: "— ¿crees que ellos —"',
         'SOMBRA B: "— probablemente."',
         'Probablemente no hablaban de ti. Probablemente.'
@@ -740,20 +740,20 @@ const TRANSLATIONS = {
       // Level 3 — La Pista
       l3n1: [
         '"Vomité antes del último partido. En serio. El entrenador lo vio todo."',
-        '"Igual tuve que salir a jugar. Y lo hice."',
-        '"No jugué bien. Igual ganamos, pero yo no aporté mucho."',
+        '"Aun así tuve que salir a jugar. Y salí."',
+        '"No jugué muy allá. Ganamos igualmente, pero yo no hice gran cosa."',
         '"Cuenta igual, ¿no? Aparecer cuenta igual, ¿verdad?"'
       ],
       l3n2: [
         '"El tiempo corre."',
         '"Te están evaluando."',
-        '"Cada segundo está siendo registrado. Cada tropiezo. Cada duda."',
+        '"Cada segundo queda registrado. Cada tropiezo. Cada duda."',
         '"...Rendimiento anotado."'
       ],
       l3n3: [
         'La placa dice: "Por intentarlo cuando daba miedo."',
         'No hay nombre.',
-        'Quizás fue hecha para alguien como tú.'
+        'Quizá lo hicieron para alguien como tú.'
       ],
       // Level 4 — El Escenario
       l4n1: [
@@ -791,7 +791,7 @@ const TRANSLATIONS = {
     creditsLines: [
       { text: 'ERES MÁS FUERTE', style: 'title', color: '#FFD700' },
       { text: '', style: 'blank' },
-      { text: 'Un viaje hacia adentro', style: 'sub', color: '#00C2B5' },
+      { text: 'Un viaje hacia dentro', style: 'sub', color: '#00C2B5' },
       { text: '', style: 'blank' },
       { text: '— — —', style: 'sep', color: '#334455' },
       { text: '', style: 'blank' },

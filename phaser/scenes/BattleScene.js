@@ -39,7 +39,8 @@ class BattleScene extends Phaser.Scene {
     this.heroHome = { x: 90, y: 175 };
 
     // friend ally (Find Your People)
-    this.friendSprite = this.add.sprite(45, 185, 'npc-guy', 8).setScale(1.8).setVisible(false);
+    this.friendSprite = this.add.sprite(45, 182, 'adam', 18).setScale(1.8).setVisible(false);
+    this.friendSprite.play('adam-idle');
 
     // ── Bars & panels ──
     this.buildHud();

@@ -68,6 +68,10 @@ class WorldScene extends Phaser.Scene {
       const npc = this.physics.add.staticSprite(pos.x * T + T / 2, pos.y * T + T / 2, key, 0);
       if (def.tint) npc.setTint(def.tint);
       npc.setDepth(5);
+      if (this.anims.exists(key + '-idle')) {
+        npc.play(key + '-idle');
+        npc.setOrigin(0.5, 0.72); // 16x32 modern sprites: feet on the tile
+      }
       npc.npcIndex = i;
       npc.talked = false;
       // subtle idle bob so NPCs read as alive

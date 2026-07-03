@@ -102,7 +102,7 @@ function buildLevel1() {
 
 // ── interiors picks (hallway set) ──────────────────────────
 const LOCKER = { sc: 0, sr: 45, w: 2, h: 3 };      // wardrobe = school locker
-const BENCH = { sc: 2, sr: 51, w: 3, h: 2 };       // long bench
+const BENCH = { sc: 2, sr: 51, w: 2, h: 2 };       // bench (2x2 — 3 wide grabbed a stray column)
 const WINDOW = { sc: 2, sr: 33, w: 1, h: 1 };      // wall window
 const SHELF = { sc: 13, sr: 18, w: 2, h: 3 };      // shelf/vending
 

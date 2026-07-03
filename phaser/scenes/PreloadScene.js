@@ -6,6 +6,11 @@ const SPRITESHEETS = [
   ['npc-guy', 'assets/sprites/npc-guy.png', 32, 32],
   ['npc-girl', 'assets/sprites/npc-girl.png', 32, 32],
   ['npc-robot', 'assets/sprites/npc-robot.png', 16, 16],
+  // LimeZu modern characters (16x32, 24 frames: 6 per dir — right, up, left, down)
+  ['adam', 'assets/sprites/modern/adam-idle.png', 16, 32],
+  ['alex', 'assets/sprites/modern/alex-idle.png', 16, 32],
+  ['amelia', 'assets/sprites/modern/amelia-idle.png', 16, 32],
+  ['bob', 'assets/sprites/modern/bob-idle.png', 16, 32],
   ['boss-pluma-roja', 'assets/sprites/boss-pluma-roja.png', 55, 93],
   ['boss-cotilleo', 'assets/sprites/boss-cotilleo.png', 112, 128],
   ['boss-panico', 'assets/sprites/boss-panico.png', 101, 98],
@@ -65,6 +70,11 @@ class PreloadScene extends Phaser.Scene {
       this.anims.create({ key: key + '-idle', frames: [{ key, frame: 0 }], frameRate: 1 });
     }
     this.anims.create({ key: 'npc-robot-walk', frames: this.anims.generateFrameNumbers('npc-robot', { start: 0, end: 4 }), frameRate: 6, repeat: -1 });
+
+    // Modern NPC idle anims (facing down = frames 18-23)
+    for (const key of ['adam', 'alex', 'amelia', 'bob']) {
+      this.anims.create({ key: key + '-idle', frames: this.anims.generateFrameNumbers(key, { start: 18, end: 23 }), frameRate: 5, repeat: -1 });
+    }
 
     // Boss idle anims
     const bossAnims = [
