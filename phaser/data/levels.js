@@ -11,8 +11,8 @@ const LEVELS = [
     accent: 0xb8cc60, bossColor: '#CC2222',
     npcs: [
       { name: 'The Anxious Echo', calmRestore: 0, cpRestore: 0, sprite: 'alex', tint: 0x9999bb },
-      { name: 'The Hall Monitor of Mistakes', calmRestore: 0, cpRestore: 0, sprite: 'npc-robot' },
-      { name: 'The Encouraging Scrawl', calmRestore: 10, cpRestore: 0, sprite: 'amelia' }
+      { name: 'The Error Monitor', calmRestore: 0, cpRestore: 0, sprite: 'npc-robot' },
+      { name: 'The Kind Note', calmRestore: 10, cpRestore: 0, sprite: 'amelia' }
     ],
     boss: {
       spriteKey: 'boss-pluma-roja', tint: 0xff5555,
@@ -30,9 +30,9 @@ const LEVELS = [
     tilesetKey: 'interiors', // hallway
     accent: 0x3d3050, bossColor: '#7B2FBE',
     npcs: [
-      { name: 'The Gossiping Silhouettes', calmRestore: 0, cpRestore: 0, sprite: 'bob', tint: 0x666688 },
-      { name: 'The Friend at a Locker', calmRestore: 0, cpRestore: 5, sprite: 'adam' },
-      { name: 'The Mirror Locker', calmRestore: 8, cpRestore: 0, sprite: 'amelia', tint: 0xaaddff }
+      { name: 'The Huddle', calmRestore: 0, cpRestore: 0, sprite: 'bob', tint: 0x666688 },
+      { name: 'The Locker Friend', calmRestore: 0, cpRestore: 5, sprite: 'adam' },
+      { name: 'The Window Reflection', calmRestore: 8, cpRestore: 0, sprite: 'amelia', tint: 0xaaddff }
     ],
     boss: {
       spriteKey: 'boss-cotilleo', tint: 0xbb88ff,
@@ -50,9 +50,9 @@ const LEVELS = [
     tilesetKey: 'overworld', // sports field
     accent: 0xffd166, bossColor: '#FF8C42',
     npcs: [
-      { name: 'The Teammate on the Bench', calmRestore: 0, cpRestore: 0, sprite: 'bob' },
+      { name: 'The Benchwarmer', calmRestore: 0, cpRestore: 0, sprite: 'bob' },
       { name: 'The Whistle', calmRestore: 0, cpRestore: 0, sprite: 'npc-robot' },
-      { name: 'The Left-Behind Trophy', calmRestore: 10, cpRestore: 0, sprite: 'amelia', tint: 0xffdd88 }
+      { name: 'The Forgotten Trophy', calmRestore: 10, cpRestore: 0, sprite: 'amelia', tint: 0xffdd88 }
     ],
     boss: {
       spriteKey: 'boss-foco', tint: 0xffffff, static: true,
@@ -71,7 +71,7 @@ const LEVELS = [
     accent: 0xc9a84c, bossColor: '#C8E6F5',
     npcs: [
       { name: 'The Actor in the Wings', calmRestore: 0, cpRestore: 0, sprite: 'alex', tint: 0xccccff },
-      { name: 'The Empty Microphone', calmRestore: 10, cpRestore: 15, sprite: 'npc-robot' },
+      { name: 'The Empty Mic', calmRestore: 10, cpRestore: 15, sprite: 'npc-robot' },
       { name: 'The Director\'s Note', calmRestore: 12, cpRestore: 0, sprite: 'amelia' }
     ],
     boss: {
@@ -91,7 +91,7 @@ const LEVELS = [
     accent: 0x00c2b5, bossColor: '#8800FF',
     npcs: [
       { name: 'The Memory', calmRestore: 15, cpRestore: 20, sprite: 'amelia', tint: 0x88ffee },
-      { name: 'The Spark\'s Full Form', calmRestore: 50, cpRestore: 100, fullRestore: true, sprite: 'adam', tint: 0xffd700 }
+      { name: 'The Spark', calmRestore: 50, cpRestore: 100, fullRestore: true, sprite: 'adam', tint: 0xffd700 }
     ],
     boss: {
       spriteKey: 'boss-ansiedad', tint: 0xaa66ff,

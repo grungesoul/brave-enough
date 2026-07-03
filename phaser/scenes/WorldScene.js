@@ -184,7 +184,9 @@ class WorldScene extends Phaser.Scene {
     this.dialogueIdx = 0;
     this.dialogueActive = true;
     this.dlg.setVisible(true);
-    this.dlgSpeaker.setText(def.name || '???');
+    const npcNames = T_(this.game, 'npcNames');
+    const localized = Array.isArray(npcNames) && npcNames[this.levelIndex] && npcNames[this.levelIndex][npc.npcIndex];
+    this.dlgSpeaker.setText(localized || def.name || '???');
     this.typeLine();
   }
 

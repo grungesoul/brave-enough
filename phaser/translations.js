@@ -106,29 +106,29 @@ const TRANSLATIONS = {
     // ── Level intro lines (keyed by level index as string) ──
     introLines: {
       0: [
-        'The smell of chalk and cold air.',
-        'Every mistake you\'ve ever made lives here.',
-        'Let\'s find out what they weigh.'
+        'Desks in neat rows, each with an exam on top.',
+        'And on every exam, a red pen. Waiting for you.',
+        'The chalkboard at the front already knows your name.'
       ],
       1: [
-        'Thirty-seven steps. Feels like three hundred.',
-        'Every eye a judgment, every whisper a verdict.',
-        'But you\'ve been through exam rooms before.',
+        'Lockers as far as you can see.',
+        'Thirty-seven steps to the end of the hallway. They feel like three hundred.',
+        'Every huddle drops its voice when you walk past. Or so it seems.',
         'Keep walking.'
       ],
       2: [
-        'The lights are too bright here.',
-        'They find every stumble, every slip, every moment you\'re not quite good enough.',
-        'Good thing you\'re not here to be perfect.'
+        'Fresh-cut grass and a sand track looping the field.',
+        'From the tree line, it feels like the whole school is watching.',
+        'Good thing you didn\'t come here to be perfect.'
       ],
       3: [
-        'The curtain is about to rise.',
-        'They\'re all waiting. The audience of everything you\'ve ever feared.',
-        'On a night like this, just walking out is the performance.'
+        'Old wooden boards and a single spotlight.',
+        'Out there, in the dark, the audience is breathing.',
+        'On a night like this, stepping into the light is the whole performance.'
       ],
       4: [
-        'No more rooms. No more crowds.',
-        'Just you, and the shape of every fear you\'ve ever had, waiting at the center of everything.',
+        'No more classrooms. No more hallways. No more crowd.',
+        'Only crystals glowing with things you remember — and something waiting at the center.',
         'This is where it started.',
         'This is where it ends.'
       ],
@@ -137,31 +137,40 @@ const TRANSLATIONS = {
     // ── Boss names ────────────────────────────────────────
     bossNames: ['The Red Pen', 'The Whisper', 'The Spotlight', 'Stage Fright', 'Anxiety'],
 
+    // ── NPC display names (per level) ─────────────────────
+    npcNames: [
+      ['The Anxious Echo', 'The Error Monitor', 'The Kind Note'],
+      ['The Huddle', 'The Locker Friend', 'The Window Reflection'],
+      ['The Benchwarmer', 'The Whistle', 'The Forgotten Trophy'],
+      ['The Actor in the Wings', 'The Empty Mic', 'The Director\'s Note'],
+      ['The Memory', 'The Spark'],
+    ],
+
     // ── Boss taunts (per level, array of 3 taunts) ────────
     bossTaunts: [
       // Level 1 — The Red Pen
       [
-        '"Every wrong answer you\'ve ever given lives in this room. I counted them."',
-        '"You studied, didn\'t you? And you still don\'t know enough. You never know enough."',
-        '"What will they think when they see your score? What will that say about you?"'
+        '"Every desk in this room keeps something of yours crossed out in red. I collect them."',
+        '"You studied, didn\'t you? Doesn\'t matter. I always find something to cross out."',
+        '"What will they think of you when I hand the exams back? Hm?"'
       ],
       // Level 2 — The Whisper
       [
-        '"They looked at you in the hallway today. Did you notice? They all looked. Right at you."',
-        '"What are you going to do — speak up? Perfect. Give them more material."',
-        '"Even if you win here, they\'ll still be watching. They\'ll always be watching."'
+        '"They were watching you from the lockers. Did you notice? All of them. You."',
+        '"What are you going to do — speak up? Great. More material for the huddle."',
+        '"Silence me today, and there\'ll be another huddle tomorrow. There always is."'
       ],
       // Level 3 — The Spotlight
       [
-        '"Look at them watching you. You can\'t perform when you\'re being watched, can you?"',
-        '"Your form is wrong. Your timing is off. They\'re all noticing. They\'re all keeping score."',
-        '"What if you fall? Right here? In front of all of them? What then?"'
+        '"Look at them by the tree line, at the edge of the track. Watching you."',
+        '"That stride. That turn. Wrong. And they\'re all keeping score."',
+        '"What if you fall in the middle of the track? In front of everyone? Then what?"'
       ],
       // Level 4 — Stage Fright
       [
-        '"Everyone came to see you. Look at them, waiting. What are you going to give them? This?"',
-        '"Forget the next line. Forget what you were going to say. That feeling — that\'s me. I live there."',
-        '"You\'ll never be ready. There is no ready. There is only the terror, forever."'
+        '"They all came to see you. Listen to the room. What are you going to give them? This?"',
+        '"The moment you step into the spotlight, the words will go. That feeling in your chest — that\'s me."',
+        '"You\'ll never be ready. \'Ready\' doesn\'t exist. Only I do, forever."'
       ],
       // Level 5 — Anxiety
       [
@@ -210,25 +219,25 @@ const TRANSLATIONS = {
 
     // ── Boss attack flavors (per level, per attack index) ─
     bossAttackFlavors: [
-      // Level 1 — The Red Pen: 3 attacks
-      [ '"Wrong."', '"Let me show you all the ways you fell short."', '"Time\'s up. You weren\'t ready. You were never ready."' ],
-      // Level 2 — The Whisper: 3 attacks
-      [ '"Heard the one about you? It\'s not good."', '"Everyone. Is. Watching."', '"You can\'t outrun what everyone already knows."' ],
-      // Level 3 — The Spotlight: 3 attacks
-      [ '"Everyone can see you now. Everything."', '"That. Right there. Did you think nobody would notice that?"', '"There is no hiding. I see all of it."' ],
-      // Level 4 — Stage Fright: 3 attacks
-      [ '"Your legs aren\'t working. They\'re all watching you stand there."', '"Line forgotten. Everything forgotten. Just you and a thousand waiting eyes."', '"Your performance is over. It never really began."' ],
-      // Level 5 — Anxiety: 4 attacks
-      [ '"What if you\'ve already used your best moves? What if you don\'t have enough left?"', '"You knew this was coming. You should have been ready. You\'re never ready enough."', '"Remember the exam? Remember the hallway? Remember the field? Remember the stage? You\'ll never stop remembering."', '"If I go — what are you without me? I\'ve been with you your whole life."' ],
+      // Level 1 — The Red Pen
+      [ '"Wrong."', '"Red. Red. Red. Do you see how much red?"', '"Time\'s up. Pens down. You didn\'t make it."' ],
+      // Level 2 — The Whisper
+      [ '"Heard what they\'re saying about you? I have. All of it."', '"Shhh. Shhh. Feel that? They\'re talking about you."', '"You can\'t outrun what everyone already knows."' ],
+      // Level 3 — The Spotlight
+      [ '"Everyone can see you now. Everything."', '"That. Right there. Did you think nobody would notice?"', '"There\'s no shade on this track. I light up everything."' ],
+      // Level 4 — Stage Fright
+      [ '"Your legs won\'t answer. And the spotlight stays on you."', '"Lines erased. Mind blank. Just you and a whole room waiting."', '"Curtain. Your performance ended before it began."' ],
+      // Level 5 — Anxiety
+      [ '"What if you\'ve already used your best moves? What if you don\'t have enough left?"', '"You knew this was coming. You should have been ready. You\'re never ready enough."', '"Remember the exam? Remember the hallway? The track? The stage? You\'ll never stop remembering."', '"If I go — what are you without me? I\'ve been with you your whole life."' ],
     ],
 
     // ── Spark intro lines per level ───────────────────────
     sparkIntros: [
-      'This room has been in your head a long time, hasn\'t it? Let\'s clear it out.',
-      'I know this one. This is the one where everything feels like it\'s about you. Keep walking.',
-      'They\'re all here. Every face you\'ve ever tried not to disappoint. But look — the ground under your feet. You can still stand on it.',
-      'I know this is the hardest one. Both things at once — the doing and the watching. But the stage is yours. They can\'t take that.',
-      'You built this place. Every room we walked through — you built them. Not because you wanted to. Because you were surviving. But you\'re not just surviving anymore.',
+      'Look at all those desks. You\'ve sat at every one thinking you weren\'t enough. Today we walk in standing.',
+      'I know this hallway. It\'s the one where everything feels like it\'s about you. It almost never is. Keep walking.',
+      'They\'re all at the edge of the track. Every face you don\'t want to let down. But feel the ground: it holds. So do you.',
+      'I know this is the hardest one. Doing it, and being seen doing it. But look at the spotlight — it\'s waiting for you.',
+      'You built this place. Every room we crossed. Not because you wanted to — because you were surviving. But you\'re not just surviving anymore.',
     ],
 
     // ── Level clear texts ─────────────────────────────────
@@ -240,10 +249,10 @@ const TRANSLATIONS = {
       '',
     ],
     levelClearTexts2: [
-      'One room cleared. You are still here.',
-      'The hallway is just a hallway.',
-      'You didn\'t need to be perfect. You just needed to show up.',
-      'The curtain is yours now. All of it is yours.',
+      'One classroom down. And you\'re still standing.',
+      'The hallway is just a hallway again.',
+      'You didn\'t need to be perfect. Just to show up.',
+      'The spotlight doesn\'t burn anymore. Now it shines.',
       '',
     ],
 
@@ -284,89 +293,89 @@ const TRANSLATIONS = {
 
     // ── NPC dialogues (per level, per NPC) ───────────────
     npcs: {
-      // Level 1
+      // Level 1 — The Exam Room
       l1n1: [
-        '"If I get this wrong, they\'ll know I don\'t belong here."',
-        '"They\'ll all see. They\'ll all know I\'ve been faking this whole time."',
+        '"I sit in the front row. Where you can hear the red pen best."',
+        '"If I slip up, they\'ll all know. That I\'m not good enough."',
         '...',
-        '"...Is that what you think too?"'
+        '"...Does that voice talk to you too?"'
       ],
       l1n2: [
-        '"Infraction logged. Wrong answer on page three. Incorrect approach on question seven."',
-        '"Your margin notes suggest confusion. Confusion has been noted."',
+        '"Infraction logged: doubtful answer on question three."',
+        '"Shaky handwriting in the margin. Noted."',
         '"I\'m still learning."',
-        '...The Monitor pauses. Writes something. Steps aside.'
+        '...The Monitor processes. Something clicks. It steps out of your way.'
       ],
       l1n3: [
-        '"Hey. I\'ve seen you in here before. You always make it out."',
-        '"— Someone who\'s rooting for you"'
+        '"I saw your name on the corkboard. Someone wrote: \'this one always makes it\'."',
+        '"— Signed: someone in your class who notices you"'
       ],
-      // Level 2
+      // Level 2 — The Hallway
       l2n1: [
-        'SHADOW A: "Oh — "',
-        'SHADOW B: "— yeah, I saw —"',
-        'SHADOW A: "— do you think they —"',
-        'SHADOW B: "— probably."',
-        'They were probably not talking about you at all. Probably.'
+        '"Hey, did you hear about —"',
+        '"— yeah, someone told me this morning —"',
+        '"— and do you think it was because —"',
+        '"— probably."',
+        'They were probably not talking about you. Probably.'
       ],
       l2n2: [
-        '"Hey. You look like you\'re having one of those days."',
-        '"I have them too. Like everything is just... a lot."',
-        '"Walk with me for a second. It\'s easier when you don\'t feel like the only one."',
-        '"I gotta go in here. But hey — you\'ve got this."'
+        '"Hey. You\'ve got that rough-day face."',
+        '"I get it too. Days when this hallway feels endless."',
+        '"I\'ll walk with you for a bit. It\'s easier with someone next to you."',
+        '"This is my locker. But hey — you\'ve got this."'
       ],
       l2n3: [
-        'Your reflection looks back at you.',
-        'It looks scared.',
-        'You realize: the scared one is also you. The brave one walking forward is also you.',
-        'They are the same person.'
+        'You catch your reflection in the window glass.',
+        'The one in the reflection looks scared.',
+        'Then it clicks: the scared one is you. And the one still walking — also you.',
+        'You\'re the same person.'
       ],
-      // Level 3
+      // Level 3 — The Field
       l3n1: [
-        '"I threw up before the last game. Actual vomit. Coach saw."',
-        '"I still had to go on. So I did."',
-        '"I didn\'t play great. We still won, actually, but I didn\'t do much."',
-        '"Still counts, right? Showing up still counts?"'
+        '"I threw up before the last game. Seriously. Coach saw everything."',
+        '"I still had to go out and play. So I did."',
+        '"I didn\'t play great. We won anyway, but I didn\'t do much."',
+        '"Still counts, right? Showing up counts, right?"'
       ],
       l3n2: [
-        '"Clock\'s running."',
-        '"You\'re being evaluated."',
-        '"Every second is being recorded. Every stumble. Every hesitation."',
+        '"The clock is running."',
+        '"You are being evaluated."',
+        '"Every lap of the track is recorded. Every stumble. Every stop."',
         '"...Performance noted."'
       ],
       l3n3: [
-        'The engraving reads: "For trying when it was terrifying."',
-        'There\'s no name on it.',
-        'Maybe it was meant for someone like you.'
+        'The plaque reads: "For trying even when it was scary."',
+        'There\'s no name engraved on it.',
+        'Maybe they left it here for someone like you.'
       ],
-      // Level 4
+      // Level 4 — The Stage
       l4n1: [
-        '"Every single night. Every single night I feel like I\'m going to forget my lines."',
-        '"And every night I walk out there and say them anyway."',
-        '"The trick is — you don\'t wait for the fear to leave. You walk out while it\'s still there."'
+        '"Every night. Every night I think I\'m going to go blank."',
+        '"And every night I step into the spotlight and say my lines anyway."',
+        '"The trick isn\'t waiting for the fear to pass. It\'s walking out wearing it."'
       ],
       l4n2: [
-        'You step up to the microphone.',
+        'You step up to the mic, right at the edge of the spotlight.',
         'You don\'t have to say anything perfect.',
-        'Sometimes just showing up at the mic is the whole point.'
+        'Sometimes reaching the mic is the whole speech.'
       ],
       l4n3: [
-        '"To whoever finds this:"',
-        '"A performance is not a test. It is not a verdict. It is a gift — imperfect, present, given."',
-        '"Go give yours."',
-        '"— The Director (who has never, not once, been unafraid)"'
+        '"To whoever finds this note in the wings:"',
+        '"A performance is not a test. Not a verdict. It\'s a gift — imperfect, present, yours."',
+        '"Go out there and give it."',
+        '"— The Director (who has never once walked out unafraid)"'
       ],
-      // Level 5
+      // Level 5 — The Mindscape
       l5n1: [
         '"You were never as alone as it felt."',
-        '"Every person who ever helped you — they were part of you too. You let them in."',
-        '"That\'s brave."'
+        '"Look at the crystals: each one glows with someone who helped you. And you let them in."',
+        '"That\'s brave too."'
       ],
       l5n2: [
-        '"I\'ve been with you the whole time. Do you know what I am?"',
+        '"I\'ve been with you the whole way. Do you know what I am yet?"',
         '"I\'m the part of you that wanted to keep going. That\'s all."',
-        '"Every time you got up after something knocked you down — that was me. That was YOU."',
-        '"I\'m not separate. I never was."',
+        '"Every time you got back up after a fall — that was me. That was YOU."',
+        '"I\'m not something separate. I never was."',
         '"Whatever that mirror shows — remember what I am. Remember what YOU are."'
       ],
     },
@@ -522,62 +531,71 @@ const TRANSLATIONS = {
     // ── Level intro lines ──────────────────────────────────
     introLines: {
       0: [
-        'Huele a tiza y a nervios.',
-        'Todos tus fallos viven aquí. Bien guardados.',
-        'Veamos cuánto pesan hoy.'
+        'Pupitres en fila, cada uno con su examen encima.',
+        'Y sobre cada examen, un boli rojo. Esperándote.',
+        'La pizarra del fondo ya sabe tu nombre.'
       ],
       1: [
-        'Treinta y siete pasos. Se hacen eternos.',
-        'Cada mirada es un juicio. Cada cuchicheo va de ti — o eso te parece.',
-        'Pero has sobrevivido cosas peores.',
-        'Sigue.'
+        'Taquillas hasta donde llega la vista.',
+        'Treinta y siete pasos hasta el final del pasillo. Se hacen eternos.',
+        'Cada corrillo baja la voz cuando pasas. O eso te parece.',
+        'Tú camina.'
       ],
       2: [
-        'Los focos aquí no perdonan.',
-        'Encuentran cada tropiezo, cada momento en que no das la talla.',
-        'Menos mal que no venías a ser perfecto.'
+        'Hierba recién cortada y una pista de arena que da la vuelta al campo.',
+        'Desde los árboles parece mirarte el instituto entero.',
+        'Menos mal que no has venido a ser perfecto.'
       ],
       3: [
-        'El telón está a punto de subir.',
-        'Ahí están todos. Todo lo que alguna vez te ha dado miedo, esperando.',
-        'Esta noche, solo con salir ya lo has conseguido.'
+        'Tablas de madera vieja y un único foco encendido.',
+        'Ahí delante, a oscuras, respira el público.',
+        'Una noche así, salir a la luz ya es la actuación entera.'
       ],
       4: [
-        'Ya no hay más salas. Ya no hay más gente.',
-        'Solo tú, y la forma de todo lo que te ha dado miedo, esperando en el centro.',
-        'Aquí empezó todo esto.',
-        'Aquí termina.'
+        'Ya no hay aulas, ni pasillos, ni público.',
+        'Solo cristales que brillan con cosas que recuerdas — y algo esperando en el centro.',
+        'Aquí empezó todo.',
+        'Aquí se acaba.'
       ],
     },
 
     // ── Boss names ────────────────────────────────────────
     bossNames: ['La Pluma Roja', 'El Cotilleo', 'El Foco', 'El Pánico Escénico', 'La Ansiedad'],
 
+    // ── Nombres de NPC (por nivel) ────────────────────────
+    npcNames: [
+      ['El Eco Ansioso', 'El Vigilante de los Fallos', 'La Nota de Ánimo'],
+      ['El Corrillo', 'El Colega de la Taquilla', 'El Reflejo de la Ventana'],
+      ['El Compañero de Banquillo', 'El Silbato', 'El Trofeo Olvidado'],
+      ['El Actor entre Bambalinas', 'El Micro Vacío', 'La Nota del Director'],
+      ['El Recuerdo', 'La Chispa'],
+    ],
+
     // ── Boss taunts ───────────────────────────────────────
     bossTaunts: [
       // Level 1 — La Pluma Roja
       [
-        '"Tengo apuntados todos tus fallos en esta aula. Todos. Sin excepción."',
-        '"Has estudiado, ¿a que sí? Y aun así no es suficiente. Nunca va a ser suficiente."',
-        '"¿Qué van a pensar cuando vean tu nota? ¿Qué dice eso de ti?"'
+        '"Cada pupitre de esta aula guarda algo tuyo tachado en rojo. Los colecciono."',
+        '"Has estudiado, ¿a que sí? Da igual. Siempre encuentro algo que tachar."',
+        '"¿Qué van a pensar de ti cuando devuelva los exámenes? ¿Eh?"'
       ],
       // Level 2 — El Cotilleo
       [
-        '"Te estaban mirando en el pasillo. ¿Te has dado cuenta? Todos. Justo a ti."',
-        '"¿Y qué vas a hacer, hablar? Genial. Dales más de qué cotillear."',
-        '"Aunque me ganes hoy, van a seguir mirando. Siempre estarán mirando."'
+        '"Te miraban desde las taquillas. ¿Te has dado cuenta? Todos. Justo a ti."',
+        '"¿Y qué vas a hacer, hablar en alto? Genial. Más material para el corrillo."',
+        '"Aunque hoy me calles, mañana habrá otro corrillo. Siempre hay otro."'
       ],
       // Level 3 — El Foco
       [
-        '"Míralos cómo te observan. No rindes cuando te están mirando, ¿verdad que no?"',
-        '"Tu postura está mal. Tu timing está fatal. Lo están notando. Todos llevan la cuenta."',
-        '"¿Y si te caes? ¿Aquí? ¿Delante de todos? ¿Y entonces qué?"'
+        '"Míralos ahí, entre los árboles, al borde de la pista. Mirándote a ti."',
+        '"Esa zancada. Ese giro. Mal. Y todos llevan la cuenta."',
+        '"¿Y si te caes en mitad de la pista? ¿Delante de todos? ¿Entonces qué?"'
       ],
       // Level 4 — El Pánico Escénico
       [
-        '"Han venido todos a verte. Ahí están, esperando. ¿Qué les vas a dar? ¿Esto?"',
-        '"Olvida el siguiente texto. Olvida lo que ibas a decir. Esa sensación en el pecho — soy yo."',
-        '"No vas a estar listo nunca. Eso no existe. Solo existe el terror, para siempre."'
+        '"Han venido todos a verte. Escucha la sala. ¿Qué piensas darles? ¿Esto?"',
+        '"En cuanto pises el foco se te irá el texto. Esa sensación del pecho — soy yo."',
+        '"Nunca vas a estar listo. Eso de estar listo no existe. Solo existo yo, para siempre."'
       ],
       // Level 5 — La Ansiedad
       [
@@ -626,25 +644,25 @@ const TRANSLATIONS = {
 
     // ── Boss attack flavors ───────────────────────────────
     bossAttackFlavors: [
-      // Level 1
-      [ '"Incorrecto."', '"Voy a mostrarte todos los fallos que has cometido."', '"Se ha acabado el tiempo. No estabas listo. Nunca lo estarás."' ],
-      // Level 2
-      [ '"¿Has oído lo que están diciendo de ti? No es bueno."', '"Todo. El. Mundo. Te. Está. Mirando."', '"No puedes huir de lo que ya sabe todo el mundo."' ],
-      // Level 3
-      [ '"Ahora todos te pueden ver. Todo."', '"Eso. Justo eso. ¿Pensabas que nadie se iba a dar cuenta?"', '"No hay dónde esconderse. Lo veo todo."' ],
-      // Level 4
-      [ '"Las piernas no te responden. Todos te están viendo ahí plantado."', '"El texto se ha ido. Todo se ha ido. Solo tú y un montón de ojos esperando."', '"Tu actuación ha terminado. En realidad nunca llegó a empezar."' ],
-      // Level 5
+      // Level 1 — La Pluma Roja
+      [ '"Mal."', '"Rojo. Rojo. Rojo. ¿Ves cuánto rojo?"', '"Se acabó el tiempo. Bolis abajo. No has llegado."' ],
+      // Level 2 — El Cotilleo
+      [ '"¿Has oído lo que dicen de ti? Yo sí. Todo."', '"Shhh. Shhh. ¿Lo notas? Están hablando de ti."', '"No puedes huir de lo que ya sabe todo el mundo."' ],
+      // Level 3 — El Foco
+      [ '"Ahora se te ve todo. Todo."', '"Eso. Justo eso. ¿Creías que no se iba a notar?"', '"En esta pista no hay sombra. Lo ilumino todo."' ],
+      // Level 4 — El Pánico Escénico
+      [ '"Las piernas no te responden. Y el foco sigue en ti."', '"Texto borrado. Cabeza en blanco. Solo tú y la sala entera esperando."', '"Telón. Tu actuación ha terminado antes de empezar."' ],
+      // Level 5 — La Ansiedad
       [ '"¿Y si ya has gastado todo lo que tenías? ¿Y si no te queda suficiente?"', '"Sabías que iba a pasar. Tenías que haberte preparado más. Nunca estás suficientemente listo."', '"¿Te acuerdas del examen? ¿Del pasillo? ¿De la pista? ¿Del escenario? No lo vas a olvidar."', '"Si me voy — ¿qué eres sin mí? Toda tu vida he estado aquí."' ],
     ],
 
     // ── Spark intro lines ─────────────────────────────────
     sparkIntros: [
-      'Esta sala lleva tiempo en tu cabeza, ¿verdad? Ya toca limpiarla.',
-      'Conozco este sitio. Es el que te hace sentir que todo va de ti. Sigue, no te rajes.',
-      'Están todos aquí. Cada cara a la que no querías fallar. Pero mira — el suelo está firme. Todavía puedes sostenerte.',
-      'Sé que este es el más duro. Las dos cosas a la vez — hacer y que te vean. Pero este escenario es tuyo. Nadie te lo puede quitar.',
-      'Tú has construido este lugar. Cada sala que hemos cruzado — tú las construiste. No porque quisieras. Porque estabas sobreviviendo. Pero ya no solo estás sobreviviendo.',
+      'Mira cuántos pupitres. En todos te has sentado a pensar que no llegabas. Hoy entramos de pie.',
+      'Este pasillo lo conozco. Aquí todo parece que va de ti. Casi nunca va de ti. Sigue andando.',
+      'Están todos al borde de la pista. Cada cara a la que no quieres fallar. Pero fíjate en el suelo: aguanta. Tú también.',
+      'Sé que este es el más difícil. Hacerlo, y que te vean hacerlo. Pero mira el foco — te está esperando a ti.',
+      'Todo esto lo construiste tú. Cada sala que hemos cruzado. No porque quisieras — porque sobrevivías. Pero ya no estás solo sobreviviendo.',
     ],
 
     // ── Level clear texts ─────────────────────────────────
@@ -656,10 +674,10 @@ const TRANSLATIONS = {
       '',
     ],
     levelClearTexts2: [
-      'Una sala menos. Y aquí sigues, tío.',
-      'El pasillo es solo un pasillo.',
-      'No hacía falta ser perfecto. Solo aparecer.',
-      'El escenario ya es tuyo. Todo tuyo.',
+      'Un aula menos. Y sigues de pie, tío.',
+      'El pasillo vuelve a ser solo un pasillo.',
+      'No hacía falta ser perfecto. Solo presentarse.',
+      'El foco ya no quema. Ahora alumbra.',
       '',
     ],
 
@@ -702,88 +720,88 @@ const TRANSLATIONS = {
     npcs: {
       // Level 1 — El Aula del Examen
       l1n1: [
-        '"Como me equivoque, van a saber que no pinto nada aquí."',
-        '"Lo van a ver. Todos van a saber que llevo tiempo haciéndome el que sabe."',
+        '"Yo me siento en primera fila. Donde mejor se oye el boli rojo."',
+        '"Como falle, se van a enterar todos. De que no doy la talla."',
         '...',
-        '"...¿Tú también piensas eso de ti?"'
+        '"...¿A ti también te lo dice esa voz?"'
       ],
       l1n2: [
-        '"Infracción registrada. Respuesta incorrecta, página tres. Enfoque incorrecto, pregunta siete."',
-        '"Tus notas al margen indican confusión. La confusión ha quedado registrada."',
-        '"Todavía estoy aprendiendo."',
-        '...El Monitor hace una pausa. Escribe algo. Se aparta.'
+        '"Infracción registrada: respuesta dudosa en la pregunta tres."',
+        '"Letra temblorosa en el margen. Queda anotado."',
+        '"Yo todavía estoy aprendiendo."',
+        '...El Vigilante procesa. Algo hace clic. Se aparta de tu camino.'
       ],
       l1n3: [
-        '"Oye. Te he visto aquí antes. Siempre salvas el tipo."',
-        '"— Alguien que te está animando"'
+        '"He visto tu nombre en el corcho. Alguien escribió: \'este sale de todas\'."',
+        '"— Firmado: alguien de tu clase que se fija en ti"'
       ],
       // Level 2 — El Pasillo
       l2n1: [
-        'SOMBRA A: "Oye, ¿has visto que —"',
-        'SOMBRA B: "— sí, yo también lo he visto —"',
-        'SOMBRA A: "— ¿crees que ellos —"',
-        'SOMBRA B: "— probablemente."',
-        'Probablemente no hablaban de ti. Probablemente.'
+        '"Oye, ¿te has enterado de lo de —"',
+        '"— sí, tío, me lo han contado esta mañana —"',
+        '"— ¿y tú crees que fue por —"',
+        '"— seguramente."',
+        'Seguramente no hablaban de ti. Seguramente.'
       ],
       l2n2: [
-        '"Oye. Tienes pinta de que hoy está siendo un truño."',
-        '"A mí también me pasa. Como que todo se amontona demasiado, ¿no?"',
-        '"Acompáñame un momento. Es más fácil cuando no sientes que eres el único."',
-        '"Yo me meto aquí. Pero oye — tú puedes."'
+        '"Ey. Tienes cara de día truño."',
+        '"A mí también me pasa. Días en que este pasillo se hace larguísimo."',
+        '"Te acompaño un trozo. Andando con alguien se nota menos."',
+        '"Yo me quedo en mi taquilla. Pero oye — tú puedes con esto."'
       ],
       l2n3: [
-        'Tu reflejo te mira.',
-        'Parece asustado.',
-        'Caes en la cuenta: el asustado también eres tú. El que sigue adelante también eres tú.',
-        'Son la misma persona.'
+        'Te ves reflejado en el cristal de la ventana.',
+        'El del reflejo parece asustado.',
+        'Y entonces caes: el que tiene miedo eres tú. Y el que sigue andando, también.',
+        'Sois la misma persona.'
       ],
       // Level 3 — La Pista
       l3n1: [
-        '"Vomité antes del último partido. En serio. El entrenador lo vio todo."',
+        '"Vomité antes del último partido. En serio. Me vio el entrenador y todo."',
         '"Aun así tuve que salir a jugar. Y salí."',
         '"No jugué muy allá. Ganamos igualmente, pero yo no hice gran cosa."',
-        '"Cuenta igual, ¿no? Aparecer cuenta igual, ¿verdad?"'
+        '"Cuenta igual, ¿no? Presentarse también cuenta, ¿verdad?"'
       ],
       l3n2: [
-        '"El tiempo corre."',
-        '"Te están evaluando."',
-        '"Cada segundo queda registrado. Cada tropiezo. Cada duda."',
+        '"El crono está en marcha."',
+        '"Se te está evaluando."',
+        '"Cada vuelta a la pista queda registrada. Cada tropiezo. Cada parada."',
         '"...Rendimiento anotado."'
       ],
       l3n3: [
-        'La placa dice: "Por intentarlo cuando daba miedo."',
-        'No hay nombre.',
-        'Quizá lo hicieron para alguien como tú.'
+        'La placa dice: "Por intentarlo aunque diera miedo."',
+        'No tiene ningún nombre grabado.',
+        'Quizá lo dejaron aquí para alguien como tú.'
       ],
       // Level 4 — El Escenario
       l4n1: [
-        '"Cada noche. Cada noche siento que me voy a quedar en blanco."',
-        '"Y cada noche salgo y lo digo de todas formas."',
-        '"El truco es — no esperas a que se te pase el miedo. Sales mientras todavía lo tienes."'
+        '"Cada noche. Cada noche pienso que me voy a quedar en blanco."',
+        '"Y cada noche salgo a la luz del foco y digo mi texto igualmente."',
+        '"El truco no es esperar a que se pase el miedo. Es salir con el miedo puesto."'
       ],
       l4n2: [
-        'Te acercas al micrófono.',
-        'No tienes que decir nada perfecto.',
-        'A veces solo llegar al micrófono ya es todo.'
+        'Te acercas al micro, justo al borde del foco.',
+        'No hace falta decir nada perfecto.',
+        'A veces llegar hasta el micro ya es todo el discurso.'
       ],
       l4n3: [
-        '"Para quien encuentre esto:"',
-        '"Una actuación no es un examen. No es un veredicto. Es un regalo — imperfecto, presente, tuyo."',
-        '"Ve a darlo."',
-        '"— El Director (que nunca, ni una sola vez, ha dejado de tener miedo)"'
+        '"Para quien encuentre esta nota entre bambalinas:"',
+        '"Actuar no es un examen. No es un veredicto. Es un regalo — imperfecto, presente, tuyo."',
+        '"Sal ahí y dalo."',
+        '"— El Director (que no ha salido sin miedo ni una sola vez)"'
       ],
       // Level 5 — Tu Interior
       l5n1: [
         '"Nunca estuviste tan solo como parecía."',
-        '"Cada persona que alguna vez te ayudó — también era parte de ti. Les dejaste entrar."',
-        '"Eso es valentía, aunque no lo parezca."'
+        '"Mira los cristales: en cada uno brilla alguien que te echó un cable. Y los dejaste entrar tú."',
+        '"Eso también es ser valiente."'
       ],
       l5n2: [
-        '"He estado contigo todo el tiempo. ¿Sabes qué soy?"',
-        '"Soy la parte de ti que quería seguir. Eso es todo."',
-        '"Cada vez que te levantaste después de que algo te tumbara — ese era yo. Eras TÚ."',
+        '"He estado contigo todo el camino. ¿Ya sabes lo que soy?"',
+        '"Soy la parte de ti que quería seguir. Nada más."',
+        '"Cada vez que te levantaste después de una caída — ese era yo. Eras TÚ."',
         '"No soy algo aparte. Nunca lo fui."',
-        '"Lo que sea que muestre ese espejo — recuerda qué soy. Recuerda qué ERES."'
+        '"Enseñe lo que enseñe ese espejo — recuerda lo que soy. Recuerda lo que ERES."'
       ],
     },
 
