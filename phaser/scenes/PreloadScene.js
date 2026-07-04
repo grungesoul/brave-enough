@@ -34,6 +34,7 @@ const IMAGES = [
   ['tiles-stage', 'assets/tiles/stage.png'],
   ['tiles-school', 'assets/tiles/school.png'],
   // project-original interactable objects (16x24, single frame)
+  ['npc-mirror', 'assets/sprites/npc-mirror.png'],
   ['npc-notebook', 'assets/sprites/npc-notebook.png'],
   ['npc-mic', 'assets/sprites/npc-mic.png'],
   ['npc-sheet', 'assets/sprites/npc-sheet.png'],
@@ -58,7 +59,7 @@ class PreloadScene extends Phaser.Scene {
     this.load.on('progress', p => { bar.width = 200 * p; });
 
     // bump AV when any image changes — browsers cache PNGs by URL
-    const AV = '?av=2';
+    const AV = '?av=3';
     SPRITESHEETS.forEach(([key, url, fw, fh]) =>
       this.load.spritesheet(key, url + AV, { frameWidth: fw, frameHeight: fh }));
     IMAGES.forEach(([key, url]) => this.load.image(key, url + AV));

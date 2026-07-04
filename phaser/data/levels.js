@@ -18,7 +18,7 @@ const LEVELS = [
     npcs: [
       { name: 'The Huddle', calmRestore: 0, cpRestore: 0, sprite: 'bob', tint: 0x666688 },
       { name: 'The Locker Friend', calmRestore: 0, cpRestore: 5, sprite: 'adam' },
-      { name: 'The Window Reflection', calmRestore: 8, cpRestore: 0, sprite: 'amelia', tint: 0xaaddff }
+      { name: 'The Window Reflection', calmRestore: 8, cpRestore: 0, sprite: 'npc-mirror' }
     ],
     boss: {
       spriteKey: 'boss-cotilleo', tint: 0xbb88ff,
