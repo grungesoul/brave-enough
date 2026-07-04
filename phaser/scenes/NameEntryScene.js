@@ -21,9 +21,42 @@ class NameEntryScene extends Phaser.Scene {
 
     this.input.keyboard.on('keydown', ev => this.onKey(ev));
     this.input.on('pointerdown', () => { if (this.confirmed) this.proceed(); });
+
+    // Mobile: an invisible input band over the name row opens the native
+    // keyboard; while it's active the desktop key handler stays out of the way.
+    this.touchTyping = false;
+    if (TouchControls.enabled && !this.confirmed) {
+      this.touchTyping = true;
+      TouchControls.showNameInput({
+        value: this.name,
+        maxLength: 12,
+        onInput: v => {
+          if (this.confirmed) return;
+          this.name = v;
+          AudioSystem.sfx(this, 'sfx-blip', 0.4);
+          this.refresh();
+        },
+        onEnter: () => {
+          if (this.confirmed || this.name.trim().length === 0) return;
+          this.touchTyping = false;
+          TouchControls.hideNameInput();
+          this.confirm();
+        }
+      });
+      this.events.once('shutdown', () => TouchControls.hideNameInput());
+    }
   }
 
   onKey(ev) {
+    if (this.touchTyping) { // the hidden mobile field owns the input
+      // …except the on-screen A button, which confirms like the keyboard's Done
+      if (ev.key === 'Enter' && this.name.trim().length > 0) {
+        this.touchTyping = false;
+        TouchControls.hideNameInput();
+        this.confirm();
+      }
+      return;
+    }
     if (this.confirmed) {
       if (ev.key === 'Enter' || ev.key === ' ') this.proceed();
       return;

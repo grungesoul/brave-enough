@@ -4,6 +4,11 @@ html, body {
   background: #0a0a12;
   height: 100%;
   overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 #game {
@@ -11,6 +16,7 @@ html, body {
   align-items: center;
   justify-content: center;
   height: 100%;
+  height: 100dvh;
 }
 
 #game canvas {
@@ -22,4 +28,131 @@ html, body {
   font-family: 'Press Start 2P';
   src: url('assets/fonts/PressStart2P-Regular.ttf') format('truetype');
   font-display: block;
+}
+
+/* ── Touch controls (Game Boy layout: D-pad left, A right) ── */
+
+#tc {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  display: none;
+  font-family: 'Press Start 2P', monospace;
+}
+
+body.touch #tc { display: block; }
+
+/* portrait: pin the game near the top so the controls live in the free space
+   below (Phaser centers via inline margins — !important overrides them) */
+@media (orientation: portrait) {
+  body.touch #game {
+    align-items: flex-start;
+  }
+  body.touch #game canvas {
+    margin-top: calc(env(safe-area-inset-top, 0px) + 56px) !important;
+  }
+}
+
+/* landscape: controls overlay the game, keep them subtle */
+@media (orientation: landscape) {
+  body.touch #tc-dpad, body.touch #tc-a { opacity: 0.55; }
+}
+
+#tc-dpad {
+  position: absolute;
+  left: calc(env(safe-area-inset-left, 0px) + 18px);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 26px);
+  width: clamp(126px, 36vmin, 174px);
+  height: clamp(126px, 36vmin, 174px);
+  display: grid;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.tc-arm, .tc-center {
+  background: rgba(24, 26, 46, 0.88);
+  border: 2px solid #4a4e78;
+  pointer-events: none; /* the whole pad handles touches geometrically */
+}
+
+.tc-up    { grid-area: 1 / 2; border-bottom: none; border-radius: 22% 22% 0 0; }
+.tc-left  { grid-area: 2 / 1; border-right: none;  border-radius: 22% 0 0 22%; }
+.tc-center{ grid-area: 2 / 2; border: none; }
+.tc-right { grid-area: 2 / 3; border-left: none;   border-radius: 0 22% 22% 0; }
+.tc-down  { grid-area: 3 / 2; border-top: none;    border-radius: 0 0 22% 22%; }
+
+.tc-arm::after {
+  content: '';
+  display: block;
+  width: 0; height: 0;
+  margin: auto;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 9px solid transparent;
+}
+.tc-up::after    { border-bottom-color: #8890c8; border-top-width: 0; }
+.tc-down::after  { border-top-color: #8890c8;    border-bottom-width: 0; }
+.tc-left::after  { border-right-color: #8890c8;  border-left-width: 0; }
+.tc-right::after { border-left-color: #8890c8;   border-right-width: 0; }
+
+.tc-arm.on { background: rgba(70, 76, 130, 0.95); }
+.tc-arm.on::after { filter: brightness(1.6); }
+
+#tc-a {
+  position: absolute;
+  right: calc(env(safe-area-inset-right, 0px) + 26px);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 44px);
+  width: clamp(68px, 20vmin, 92px);
+  height: clamp(68px, 20vmin, 92px);
+  border-radius: 50%;
+  background: rgba(120, 30, 40, 0.9);
+  border: 3px solid #c8506a;
+  color: #ffd9e0;
+  font-size: clamp(18px, 5vmin, 24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+#tc-a.on {
+  background: rgba(200, 60, 80, 0.95);
+  transform: scale(0.94);
+}
+
+#tc-mute {
+  position: absolute;
+  left: calc(env(safe-area-inset-left, 0px) + 12px);
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(24, 26, 46, 0.8);
+  border: 2px solid #4a4e78;
+  color: #8890c8;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+#tc-mute.muted { color: #444; text-decoration: line-through; }
+
+/* invisible input band over the canvas for NameEntry (native keyboard) */
+#tc-name {
+  position: fixed;
+  z-index: 11;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: transparent;
+  caret-color: transparent;
+  font-size: 16px; /* ≥16px: stop iOS zoom-on-focus */
+  text-align: center;
 }
