@@ -2,15 +2,16 @@
 
 // Frame sizes verified in assets/CREDITS.md — measured, not guessed.
 const SPRITESHEETS = [
-  ['hero', 'assets/sprites/hero.png', 32, 32],
+  // Pipoya FREE RPG Character Sprites 32x32 (96x128 sheets, 3 cols x 4 rows:
+  // rows = down, left, right, up; commercial use OK, no credit required)
+  ['hero', 'assets/sprites/pipoya/hero.png', 32, 32],
+  ['adam', 'assets/sprites/pipoya/adam.png', 32, 32],
+  ['alex', 'assets/sprites/pipoya/alex.png', 32, 32],
+  ['amelia', 'assets/sprites/pipoya/amelia.png', 32, 32],
+  ['bob', 'assets/sprites/pipoya/bob.png', 32, 32],
   ['npc-guy', 'assets/sprites/npc-guy.png', 32, 32],
   ['npc-girl', 'assets/sprites/npc-girl.png', 32, 32],
   ['npc-robot', 'assets/sprites/npc-robot.png', 16, 16],
-  // LimeZu modern characters (16x32, 24 frames: 6 per dir — right, up, left, down)
-  ['adam', 'assets/sprites/modern/adam-idle.png', 16, 32],
-  ['alex', 'assets/sprites/modern/alex-idle.png', 16, 32],
-  ['amelia', 'assets/sprites/modern/amelia-idle.png', 16, 32],
-  ['bob', 'assets/sprites/modern/bob-idle.png', 16, 32],
   ['boss-pluma-roja', 'assets/sprites/boss-pluma-roja.png', 55, 93],
   ['boss-cotilleo', 'assets/sprites/boss-cotilleo.png', 112, 128],
   ['boss-panico', 'assets/sprites/boss-panico.png', 101, 98],
@@ -32,8 +33,8 @@ const IMAGES = [
   ['tiles-town', 'assets/tiles/town.png'],
   ['tiles-dungeon', 'assets/tiles/dungeon.png'],
   ['tiles-stage', 'assets/tiles/stage.png'],
-  ['tiles-interiors', 'assets/tiles/interiors.png'],
-  ['tiles-room-builder', 'assets/tiles/room-builder.png'],
+  ['tiles-school', 'assets/tiles/school.png'],
+  ['ui-panel', 'assets/ui/panel-dark.png'],
   ['parallax-back', 'assets/ui/parallax-back.png'],
   ['parallax-middle', 'assets/ui/parallax-middle.png'],
   ['parallax-front', 'assets/ui/parallax-front.png'],
@@ -62,19 +63,22 @@ class PreloadScene extends Phaser.Scene {
   }
 
   create() {
-    // Walk anims for 32x32 4x3 character sheets: row0=down, row1=side, row2=up
-    for (const key of ['hero', 'npc-guy', 'npc-girl']) {
+    // Pipoya 32x32 sheets (3x4 grid): rows = down 0-2, left 3-5, right 6-8, up 9-11.
+    // '-side' uses the right-facing row; WorldScene flips X for left.
+    for (const key of ['hero', 'adam', 'alex', 'amelia', 'bob']) {
+      this.anims.create({ key: key + '-down', frames: this.anims.generateFrameNumbers(key, { start: 0, end: 2 }), frameRate: 8, repeat: -1 });
+      this.anims.create({ key: key + '-side', frames: this.anims.generateFrameNumbers(key, { start: 6, end: 8 }), frameRate: 8, repeat: -1 });
+      this.anims.create({ key: key + '-up', frames: this.anims.generateFrameNumbers(key, { start: 9, end: 11 }), frameRate: 8, repeat: -1 });
+      this.anims.create({ key: key + '-idle', frames: [{ key, frame: 1 }], frameRate: 1 });
+    }
+    // Ansimuz 32x32 4x3 sheets: row0=down, row1=side, row2=up
+    for (const key of ['npc-guy', 'npc-girl']) {
       this.anims.create({ key: key + '-down', frames: this.anims.generateFrameNumbers(key, { start: 0, end: 3 }), frameRate: 8, repeat: -1 });
       this.anims.create({ key: key + '-side', frames: this.anims.generateFrameNumbers(key, { start: 4, end: 7 }), frameRate: 8, repeat: -1 });
       this.anims.create({ key: key + '-up', frames: this.anims.generateFrameNumbers(key, { start: 8, end: 11 }), frameRate: 8, repeat: -1 });
       this.anims.create({ key: key + '-idle', frames: [{ key, frame: 0 }], frameRate: 1 });
     }
     this.anims.create({ key: 'npc-robot-walk', frames: this.anims.generateFrameNumbers('npc-robot', { start: 0, end: 4 }), frameRate: 6, repeat: -1 });
-
-    // Modern NPC idle anims (facing down = frames 18-23)
-    for (const key of ['adam', 'alex', 'amelia', 'bob']) {
-      this.anims.create({ key: key + '-idle', frames: this.anims.generateFrameNumbers(key, { start: 18, end: 23 }), frameRate: 5, repeat: -1 });
-    }
 
     // Boss idle anims
     const bossAnims = [

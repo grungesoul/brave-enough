@@ -2,11 +2,11 @@
 <html>
 <head><meta charset="utf-8"><style>body{background:#223;color:#fff;font:10px monospace} canvas{image-rendering:pixelated;display:block;margin:8px 0}</style></head>
 <body>
-<div>?sheet=interiors|room-builder &amp; ?from=ROW — grid with row:col labels, 3x zoom</div>
+<div>?sheet=school|stage|dungeon|overworld &amp; ?from=ROW — grid with row:col labels, 3x zoom</div>
 <canvas id="c"></canvas>
 <script>
 const params = new URLSearchParams(location.search);
-const sheet = params.get('sheet') || 'interiors';
+const sheet = params.get('sheet') || 'school';
 const from = parseInt(params.get('from') || '0', 10);
 const ROWS = 16; // rows shown per page
 const img = new Image();

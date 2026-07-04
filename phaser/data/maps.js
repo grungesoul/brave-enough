@@ -1,39 +1,42 @@
 // Code-generated tilemaps (no Tiled): each map is built from 2-D index arrays.
-// ground indices → tiles/room-builder.png (17 cols)
-// prop stamps    → tiles/interiors.png (16 cols)
-// Tile picks verified with tileinspect.html + per-tile color analysis.
+// School levels use tiles/school.png (project-original tileset, 16 cols);
+// the mindscape uses the Ansimuz dungeon tileset.
+//
+// Level order (redesigned arc): 1 hallway → 2 classroom+library → 3 stage →
+// 4 exam hall (biggest map, camera scroll) → 5 mindscape.
+// Calm gems get scarcer as tension rises: explicit `gems` arrays per map.
 'use strict';
 
 const T = 16; // tile size
 
-const RB = (r, c) => r * 17 + c; // room-builder.png, 17 columns
-const IN = (r, c) => r * 16 + c; // interiors.png, 16 columns
+// school.png — original tileset generated for this project (see
+// scratch script make_school_tiles.py); 16 columns, 16x16 tiles.
+const SC = (r, c) => r * 16 + c;
 
-// ── room-builder picks ─────────────────────────────────────
-const FLOOR_CREAM = RB(14, 12);  // warm cream floor (classroom)
-const FLOOR_GREY = RB(10, 12);   // light grey floor
-const WALL_TOP = RB(12, 1);      // pale wall band: top trim
-const WALL_FACE = RB(13, 1);     // pale wall band: face
-const EDGE_DARK = RB(10, 14);    // dark grey void/edge
+// ── base tiles (row 0) ─────────────────────────────────────
+const FLOOR_GREY = SC(0, 0);
+const FLOOR_CREAM = SC(0, 1);
+const FLOOR_WOOD = SC(0, 2);     // stage boards
+const EDGE_DARK = SC(0, 3);
+const WALL_TOP = SC(0, 4);
+const WALL_FACE = SC(0, 5);
+const WINDOW = { sc: 6, sr: 0, w: 1, h: 1 };
+const CORKBOARD = { sc: 7, sr: 0, w: 2, h: 1 };
 
-// ── interiors picks (classroom set, rows 35-43) ────────────
-// student desk w/ paper + red pen (1 col x 2 rows) — fits the exam theme
-const DESK_PEN = { sc: 3, sr: 36, w: 1, h: 2 };
-// student desk w/ pencil + notebook
-const DESK_NOTE = { sc: 4, sr: 36, w: 1, h: 2 };
-// teacher desk with open book (2x2)
-const DESK_TEACHER = { sc: 5, sr: 36, w: 2, h: 2 };
-// standing green chalkboard (2 cols x 3 rows)
-const CHALKBOARD = { sc: 7, sr: 35, w: 2, h: 3 };
-// corkboard with notes (2x1, wall decor)
-const CORKBOARD = { sc: 0, sr: 41, w: 2, h: 1 };
-// green rug (3x2) — decorative, walkable
-const RUG = { sc: 0, sr: 42, w: 3, h: 2 };
+// ── furniture stamps (rows 1-3) ────────────────────────────
+const DESK_PEN = { sc: 0, sr: 1, w: 1, h: 2 };     // desk w/ paper + red pen
+const DESK_NOTE = { sc: 1, sr: 1, w: 1, h: 2 };    // desk w/ pencil + notebook
+const DESK_TEACHER = { sc: 2, sr: 1, w: 2, h: 2 }; // teacher desk w/ open book
+const CHALKBOARD = { sc: 4, sr: 1, w: 2, h: 3 };
+const LOCKER = { sc: 6, sr: 1, w: 2, h: 3 };
+const BENCH = { sc: 8, sr: 1, w: 2, h: 2 };
+const SHELF = { sc: 10, sr: 1, w: 2, h: 3 };       // library bookcase
+const RUG = { sc: 12, sr: 1, w: 3, h: 2 };
 
 function stampInto(grid, piece, dc, dr) {
   for (let y = 0; y < piece.h; y++) {
     for (let x = 0; x < piece.w; x++) {
-      grid[dr + y][dc + x] = IN(piece.sr + y, piece.sc + x);
+      grid[dr + y][dc + x] = SC(piece.sr + y, piece.sc + x);
     }
   }
 }
@@ -42,72 +45,8 @@ function emptyGrid(w, h, fill) {
   return Array.from({ length: h }, () => Array(w).fill(fill));
 }
 
-// ── Level 1: El Aula del Examen (classroom) ────────────────
+// ── Level 1: El Primer Día (school hallway) ────────────────
 function buildLevel1() {
-  const W = 30, H = 20;
-  const ground = emptyGrid(W, H, FLOOR_GREY);
-  const props = emptyGrid(W, H, -1);
-  const deco = emptyGrid(W, H, -1);
-
-  // Top wall band (2 rows) + dark edge elsewhere
-  for (let x = 0; x < W; x++) {
-    ground[0][x] = WALL_TOP;
-    ground[1][x] = WALL_FACE;
-    ground[H - 1][x] = EDGE_DARK;
-  }
-  for (let y = 0; y < H; y++) {
-    ground[y][0] = EDGE_DARK;
-    ground[y][W - 1] = EDGE_DARK;
-  }
-
-  // Corkboards on the top wall
-  stampInto(deco, CORKBOARD, 4, 1);
-  stampInto(deco, CORKBOARD, 24, 1);
-
-  // Standing chalkboard front-center (the boss waits here)
-  stampInto(props, CHALKBOARD, 13, 2);
-
-  // Teacher desk left of the chalkboard
-  stampInto(props, DESK_TEACHER, 7, 3);
-
-  // Student desks: 3 columns x 3 rows, alternating pen/notebook props
-  const deskCols = [6, 13, 20];
-  const deskRows = [8, 11, 14];
-  let alt = 0;
-  for (const dr of deskRows) {
-    for (const dc of deskCols) {
-      stampInto(props, (alt++ % 2 === 0) ? DESK_PEN : DESK_NOTE, dc, dr);
-      stampInto(props, (alt % 2 === 0) ? DESK_PEN : DESK_NOTE, dc + 3, dr);
-    }
-  }
-
-  // Rug in the middle aisle (walkable)
-  stampInto(deco, RUG, 10, 16);
-
-  return {
-    width: W, height: H,
-    groundTileset: 'room-builder',
-    propsTileset: 'interiors',
-    ground, props, deco,
-    collideGround: [WALL_TOP, WALL_FACE, EDGE_DARK],
-    playerSpawn: { x: 15, y: 17 },
-    npcs: [
-      { x: 3, y: 8 },    // The Anxious Echo
-      { x: 26, y: 12 },  // The Hall Monitor of Mistakes
-      { x: 3, y: 15 }    // The Encouraging Scrawl
-    ],
-    bossTrigger: { x: 13, y: 5, w: 2, h: 1 } // in front of the chalkboard
-  };
-}
-
-// ── interiors picks (hallway set) ──────────────────────────
-const LOCKER = { sc: 0, sr: 45, w: 2, h: 3 };      // wardrobe = school locker
-const BENCH = { sc: 2, sr: 51, w: 2, h: 2 };       // bench (2x2 — 3 wide grabbed a stray column)
-const WINDOW = { sc: 2, sr: 33, w: 1, h: 1 };      // wall window
-const SHELF = { sc: 13, sr: 18, w: 2, h: 3 };      // shelf/vending
-
-// ── Level 2: El Pasillo (school hallway) ───────────────────
-function buildLevel2() {
   const W = 38, H = 12;
   const ground = emptyGrid(W, H, FLOOR_GREY);
   const props = emptyGrid(W, H, -1);
@@ -128,74 +67,81 @@ function buildLevel2() {
 
   return {
     width: W, height: H,
-    groundTileset: 'room-builder', propsTileset: 'interiors',
+    groundTileset: 'school', propsTileset: 'school',
     ground, props, deco,
     collideGround: [WALL_TOP, WALL_FACE, EDGE_DARK],
     playerSpawn: { x: 2, y: 8 },
     npcs: [
-      { x: 9, y: 6 },    // The Gossiping Silhouettes
-      { x: 20, y: 5 },   // The Friend at a Locker
-      { x: 27, y: 8 }    // The Mirror Locker
+      { x: 9, y: 6 },    // The Huddle
+      { x: 20, y: 5 },   // The Locker Friend
+      { x: 27, y: 8 }    // The Window Reflection
     ],
     bossTrigger: { x: 35, y: 5, w: 2, h: 4 }, // far end of the corridor
-    ambient: { color: 0x201030, alpha: 0.18 }
+    gems: [[4, 6], [12, 9], [16, 5], [25, 6]], // gentlest level: 4 gems
+    ambient: { color: 0x201030, alpha: 0.12 }
   };
 }
 
-// ── Level 3: La Pista (sports field) — overworld tileset ───
-const OW = (r, c) => r * 29 + c;
-const GRASS = OW(1, 1);
-const GRASS2 = OW(1, 2);
-const TREE_TOP = OW(9, 9);
-const TREE_BOT = OW(10, 9);
-const BUSH = OW(7, 12);
-const DIRT = OW(4, 12);
-const DIRT2 = OW(5, 13);
-
-function buildLevel3() {
+// ── Level 2: El Trabajo en Grupo (classroom + library corner) ──
+function buildLevel2() {
   const W = 32, H = 20;
-  const ground = emptyGrid(W, H, GRASS);
+  const ground = emptyGrid(W, H, FLOOR_GREY);
   const props = emptyGrid(W, H, -1);
   const deco = emptyGrid(W, H, -1);
 
-  // grass variation
-  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-    if ((x * 7 + y * 13) % 11 === 0) ground[y][x] = GRASS2;
+  for (let x = 0; x < W; x++) {
+    ground[0][x] = WALL_TOP;
+    ground[1][x] = WALL_FACE;
+    ground[H - 1][x] = EDGE_DARK;
   }
-  // running track: dirt ring
-  for (let y = 4; y < 16; y++) {
-    for (let x = 4; x < 28; x++) {
-      const onRing = (y < 6 || y >= 14 || x < 6 || x >= 26);
-      if (onRing) ground[y][x] = DIRT;
-    }
+  for (let y = 0; y < H; y++) {
+    ground[y][0] = EDGE_DARK;
+    ground[y][W - 1] = EDGE_DARK;
   }
-  // tree/bush perimeter (props = collide)
-  for (let x = 0; x < W; x += 2) { props[0][x] = TREE_TOP; props[1][x] = TREE_BOT; props[0][x + 1] = BUSH; }
-  for (let y = 3; y < H - 3; y += 2) {
-    props[y][0] = TREE_TOP; props[y + 1][0] = TREE_BOT;
-    props[y][W - 1] = TREE_TOP; props[y + 1][W - 1] = TREE_BOT;
+
+  // Corkboards on the top wall
+  stampInto(deco, CORKBOARD, 4, 1);
+  stampInto(deco, CORKBOARD, 20, 1);
+
+  // Standing chalkboard front-center (the boss waits here)
+  stampInto(props, CHALKBOARD, 14, 2);
+
+  // Teacher desk left of the chalkboard
+  stampInto(props, DESK_TEACHER, 8, 3);
+
+  // Group tables: desks pushed together in 2x2 clusters (group work!)
+  for (const [dc, dr] of [[5, 8], [13, 8], [21, 8], [5, 13], [13, 13], [21, 13]]) {
+    stampInto(props, DESK_NOTE, dc, dr);
+    stampInto(props, DESK_PEN, dc + 1, dr);
   }
-  for (let x = 1; x < W - 1; x += 2) { props[H - 2][x] = TREE_TOP; props[H - 1][x] = TREE_BOT; }
+
+  // Library corner: bookcases along the right wall
+  for (const dr of [3, 7, 11, 15]) stampInto(props, SHELF, 28, dr);
+
+  // Rug in the middle aisle (walkable)
+  stampInto(deco, RUG, 10, 17);
 
   return {
     width: W, height: H,
-    groundTileset: 'overworld', propsTileset: 'overworld',
+    groundTileset: 'school',
+    propsTileset: 'school',
     ground, props, deco,
-    collideGround: [],
-    playerSpawn: { x: 16, y: 17 },
+    collideGround: [WALL_TOP, WALL_FACE, EDGE_DARK],
+    playerSpawn: { x: 15, y: 17 },
     npcs: [
-      { x: 5, y: 10 },   // The Teammate on the Bench
-      { x: 26, y: 8 },   // The Whistle
-      { x: 16, y: 12 }   // The Left-Behind Trophy
+      { x: 4, y: 10 },   // The Quiet Groupmate
+      { x: 25, y: 12 },  // The Idea Notebook
+      { x: 26, y: 5 }    // The Returning Student (library corner)
     ],
-    bossTrigger: { x: 15, y: 8, w: 3, h: 2 } // center of the field
+    bossTrigger: { x: 14, y: 5, w: 2, h: 1 }, // in front of the chalkboard
+    gems: [[3, 16], [18, 11], [24, 16]]
   };
 }
 
-// ── Level 4: El Escenario (dark stage + spotlight) ─────────
-function buildLevel4() {
+// ── Level 3: La Presentación (dark stage + spotlight) ──────
+function buildLevel3() {
   const W = 30, H = 20;
-  const ground = emptyGrid(W, H, FLOOR_CREAM); // warm wood boards
+  const ground = emptyGrid(W, H, FLOOR_WOOD); // stage boards
   const props = emptyGrid(W, H, -1);
   const deco = emptyGrid(W, H, -1);
 
@@ -210,7 +156,7 @@ function buildLevel4() {
 
   return {
     width: W, height: H,
-    groundTileset: 'room-builder', propsTileset: 'interiors',
+    groundTileset: 'school', propsTileset: 'school',
     ground, props, deco,
     collideGround: [EDGE_DARK],
     playerSpawn: { x: 15, y: 16 },
@@ -220,8 +166,61 @@ function buildLevel4() {
       { x: 24, y: 13 }   // The Director's Note
     ],
     bossTrigger: { x: 14, y: 4, w: 3, h: 2 }, // center stage front
+    gems: [[4, 8], [25, 8], [15, 13]],
     ambient: { color: 0x050510, alpha: 0.55 },
     spotlight: true
+  };
+}
+
+// ── Level 4: El Examen Final (exam hall — biggest map) ─────
+function buildLevel4() {
+  const W = 40, H = 24;
+  const ground = emptyGrid(W, H, FLOOR_GREY);
+  const props = emptyGrid(W, H, -1);
+  const deco = emptyGrid(W, H, -1);
+
+  for (let x = 0; x < W; x++) {
+    ground[0][x] = WALL_TOP;
+    ground[1][x] = WALL_FACE;
+    ground[H - 1][x] = EDGE_DARK;
+  }
+  for (let y = 0; y < H; y++) {
+    ground[y][0] = EDGE_DARK;
+    ground[y][W - 1] = EDGE_DARK;
+  }
+
+  // Twin chalkboards flanking the boss spot — the front of the hall looms
+  stampInto(props, CHALKBOARD, 15, 2);
+  stampInto(props, CHALKBOARD, 23, 2);
+  // Corkboards (exam instructions) on the top wall
+  stampInto(deco, CORKBOARD, 5, 1);
+  stampInto(deco, CORKBOARD, 33, 1);
+
+  // Endless rows of exam desks: 7 columns x 5 rows, every one with the red pen
+  const deskCols = [4, 9, 14, 19, 24, 29, 34];
+  const deskRows = [7, 10, 13, 16, 19];
+  for (const dr of deskRows) {
+    for (const dc of deskCols) {
+      stampInto(props, DESK_PEN, dc, dr);
+      stampInto(props, DESK_PEN, dc + 2, dr);
+    }
+  }
+
+  return {
+    width: W, height: H,
+    groundTileset: 'school',
+    propsTileset: 'school',
+    ground, props, deco,
+    collideGround: [WALL_TOP, WALL_FACE, EDGE_DARK],
+    playerSpawn: { x: 20, y: 21 },
+    npcs: [
+      { x: 6, y: 21 },   // The Front-Row Student
+      { x: 32, y: 15 },  // The Practice Sheet
+      { x: 12, y: 9 }    // The Kind Note
+    ],
+    bossTrigger: { x: 19, y: 4, w: 3, h: 2 }, // front-center, between the boards
+    gems: [[36, 21], [2, 12]], // climax: only 2 gems in the whole hall
+    ambient: { color: 0x3a0505, alpha: 0.22 }
   };
 }
 
@@ -259,7 +258,8 @@ function buildLevel5() {
       { x: 24, y: 10 }   // The Spark's Full Form
     ],
     bossTrigger: { x: 14, y: 3, w: 3, h: 2 },
-    ambient: { color: 0x2a0055, alpha: 0.18 }
+    gems: [[15, 13]], // the deepest level: a single gem
+    ambient: { color: 0x2a0055, alpha: 0.22 }
   };
 }
 

@@ -29,17 +29,22 @@ class BattleScene extends Phaser.Scene {
     this.bossSprite = b.static
       ? this.add.image(w / 2 + 60, 120, b.spriteKey)
       : this.add.sprite(w / 2 + 60, 120, b.spriteKey).play(b.spriteKey + '-idle');
+    this.bossTint = b.tint || null; // current tint (phase 2 may repaint it)
     if (b.tint) this.bossSprite.setTint(b.tint);
     this.bossSprite.setScale(this.levelIndex === 4 ? 1.15 : 1);
     this.bossBob = this.tweens.add({ targets: this.bossSprite, y: 114, duration: 1300, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+    if (b.static) {
+      // static bosses (El Foco) breathe via a light pulse instead of frames
+      this.tweens.add({ targets: this.bossSprite, alpha: 0.72, scaleX: 1.06, scaleY: 1.06, duration: 900, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+    }
     this.bossHome = { x: w / 2 + 60, y: 120 };
 
     // ── Hero (back turned, bottom-left) ──
-    this.heroSprite = this.add.sprite(90, 175, 'hero', 8).setScale(2.2); // up-facing row
+    this.heroSprite = this.add.sprite(90, 175, 'hero', 10).setScale(2.2); // up-facing row (Pipoya row 4)
     this.heroHome = { x: 90, y: 175 };
 
     // friend ally (Find Your People)
-    this.friendSprite = this.add.sprite(45, 182, 'adam', 18).setScale(1.8).setVisible(false);
+    this.friendSprite = this.add.sprite(45, 182, 'adam', 1).setScale(1.8).setVisible(false);
     this.friendSprite.play('adam-idle');
 
     // ── Bars & panels ──
@@ -63,7 +68,8 @@ class BattleScene extends Phaser.Scene {
     this.input.keyboard.on('keydown-M', () => AudioSystem.toggleMute(this.game));
     this.input.on('pointerdown', () => { if (this.phase === 'dialogue') this.advanceDialogue(); });
 
-    AudioSystem.playMusic(this, this.levelIndex === 4 ? 'music-boss-final' : 'music-battle');
+    // climax levels (exam + final) get the heavy boss track
+    AudioSystem.playMusic(this, this.levelIndex >= 3 ? 'music-boss-final' : 'music-battle');
 
     // Boss intro: name banner slides in, then the opening taunt.
     // phase 'anim' during the banner so Enter-mashing can't touch dialogue state.
@@ -87,11 +93,18 @@ class BattleScene extends Phaser.Scene {
   }
 
   // ── Text lookups ──
-  bossName() { return (T_(this.game, 'bossNames') || [])[this.levelIndex] || '???'; }
+  bossName() {
+    if (this.core && this.core.boss.phase === 2) {
+      const n2 = (T_(this.game, 'bossPhase2Names') || [])[this.levelIndex];
+      if (n2) return n2;
+    }
+    return (T_(this.game, 'bossNames') || [])[this.levelIndex] || '???';
+  }
   taunts() { return (T_(this.game, 'bossTaunts') || [])[this.levelIndex] || ['...']; }
   defeatLines() { return (T_(this.game, 'bossDefeatLines') || [])[this.levelIndex] || ['...']; }
   attackFlavor(i) {
-    const f = (T_(this.game, 'bossAttackFlavors') || [])[this.levelIndex] || [];
+    const key = this.core.boss.phase === 2 ? 'bossPhase2AttackFlavors' : 'bossAttackFlavors';
+    const f = (T_(this.game, key) || [])[this.levelIndex] || [];
     return f[i] || '';
   }
   abilityName(id) {
@@ -177,8 +190,9 @@ class BattleScene extends Phaser.Scene {
   buildMenu() {
     const w = this.scale.width;
     this.menuPanel = this.add.container(0, 0);
-    const bg = this.add.rectangle(w / 2, 285, w - 12, 62, 0x101024, 0.94).setStrokeStyle(2, this.level.accent);
-    this.menuPanel.add(bg);
+    const bg = this.add.nineslice(w / 2, 285, 'ui-panel', 0, w - 12, 62, 5, 5, 5, 5).setAlpha(0.95);
+    const bgEdge = this.add.rectangle(w / 2, 285, w - 12, 62).setStrokeStyle(1, this.level.accent, 0.9);
+    this.menuPanel.add([bg, bgEdge]);
     this.menuRows = [];
     for (let i = 0; i < 3; i++) {
       const y = 264 + i * 17;
@@ -317,6 +331,7 @@ class BattleScene extends Phaser.Scene {
     // outcome
     this.time.delayedCall(Math.max(900, delay + 300), () => {
       if (result.victory) { this.onVictory(); return; }
+      if (result.events.find(e => e.type === 'phaseChange')) { this.onPhaseChange(); return; }
       if (result.mirrorAdapted) {
         this.showDialogue(T_(this.game, 'speakerAnxiety'), [TFn_(this.game, 'mirrorAdapts', this.abilityName(result.mirrorAdapted))], () => this.bossAct());
         return;
@@ -329,7 +344,7 @@ class BattleScene extends Phaser.Scene {
     this.bossSprite.setTintFill(0xffffff);
     this.time.delayedCall(90, () => {
       this.bossSprite.clearTint();
-      if (this.level.boss.tint) this.bossSprite.setTint(this.level.boss.tint);
+      if (this.bossTint) this.bossSprite.setTint(this.bossTint);
     });
     const kx = 14;
     this.tweens.add({ targets: this.bossSprite, x: this.bossHome.x + kx, duration: 70, yoyo: true, ease: 'quad.out' });
@@ -368,6 +383,37 @@ class BattleScene extends Phaser.Scene {
         if (r.defeat) this.onDefeat();
         else this.setPlayerTurn();
       });
+    });
+  }
+
+  // ── Phase change (two-phase bosses, e.g. the exam's Red Pen) ──
+  onPhaseChange() {
+    this.phase = 'anim';
+    const w = this.scale.width, h = this.scale.height;
+    AudioSystem.sfx(this, 'sfx-limit-break', 0.8);
+    this.cameras.main.shake(450, 0.012);
+    this.cameras.main.flash(500, 255, 255, 255);
+
+    // the boss pales into its second form; a washed-out veil drains the scene
+    const p2 = this.level.boss.phase2 || {};
+    this.bossTint = p2.tint || 0xffffff;
+    this.bossSprite.setTint(this.bossTint);
+    const veil = this.add.rectangle(0, 0, w, h, 0xe8e8f4, 0).setOrigin(0).setDepth(5);
+    this.tweens.add({ targets: veil, fillAlpha: 0.15, duration: 900 });
+
+    // second name banner, like the battle intro
+    const name2 = (T_(this.game, 'bossPhase2Names') || [])[this.levelIndex] || this.bossName();
+    const banner = this.add.container(0, 0).setDepth(90);
+    const bband = this.add.rectangle(w / 2, 100, w, 40, 0x000000, 0.75);
+    const btext = this.add.text(w + 200, 100, name2.toUpperCase(), txtStyle(14, '#f0f0ff', { stroke: '#000', strokeThickness: 4 })).setOrigin(0.5);
+    banner.add([bband, btext]);
+    this.tweens.add({ targets: btext, x: w / 2, duration: 500, ease: 'cubic.out' });
+    this.tweens.add({ targets: banner, alpha: 0, delay: 1600, duration: 400, onComplete: () => banner.destroy() });
+
+    this.time.delayedCall(2100, () => {
+      const lines = (T_(this.game, 'bossPhase2Lines') || [])[this.levelIndex] || ['...'];
+      this.refreshHud();
+      this.showDialogue(name2, lines, () => this.bossAct());
     });
   }
 
@@ -421,11 +467,12 @@ class BattleScene extends Phaser.Scene {
   buildDialogue() {
     const w = this.scale.width;
     this.dlg = this.add.container(0, 0).setDepth(100).setVisible(false);
-    const box = this.add.rectangle(w / 2, 285, w - 12, 62, 0x101024, 0.96).setStrokeStyle(2, 0xffd700);
+    const box = this.add.nineslice(w / 2, 285, 'ui-panel', 0, w - 12, 62, 5, 5, 5, 5).setAlpha(0.97);
+    const edge = this.add.rectangle(w / 2, 285, w - 12, 62).setStrokeStyle(1, 0xffd700, 0.85);
     this.dlgSpeaker = this.add.text(16, 258, '', txtStyle(7, '#ffd700'));
     this.dlgText = this.add.text(16, 272, '', txtStyle(7, '#f0eee0', { wordWrap: { width: w - 40 }, lineSpacing: 4 }));
     this.dlgHint = this.add.text(w - 14, 306, '▼', txtStyle(7, '#8899bb')).setOrigin(1);
-    this.dlg.add([box, this.dlgSpeaker, this.dlgText, this.dlgHint]);
+    this.dlg.add([box, edge, this.dlgSpeaker, this.dlgText, this.dlgHint]);
   }
 
   showDialogue(speaker, lines, cb) {

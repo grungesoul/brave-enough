@@ -1,6 +1,69 @@
 # BRAVE ENOUGH
 ## Complete Game Design Document
-### Version 1.0 — Single Source of Truth
+### Version 2.0 — Single Source of Truth
+
+---
+
+# SECTION 0: STEP-UP REDESIGN (July 2026) — CURRENT CANON
+
+> This section supersedes the level order, boss order, unlock schedule and
+> dialogue principles described in the legacy sections below. Everything not
+> contradicted here (stats philosophy, UI, audio, states) still applies.
+> Implemented in `phaser/` (translations.js, data/levels.js, data/maps.js).
+
+## Rising-tension arc (social → academic; the exam is the climax)
+
+| # | Level (ES / EN) | Setting | Fear | Boss | Notes |
+|---|---|---|---|---|---|
+| 1 | El Primer Día / The First Day | Hallway + lockers | Approaching strangers | El Cotilleo (The Whisper) | Mind-reading distortion. Smallest map, 4 calm gems |
+| 2 | El Trabajo en Grupo / The Group Project | Classroom + library corner | Speaking in a small group | El Foco (The Spotlight) | Spotlight-effect distortion. |
+| 3 | La Presentación / The Presentation | Theater stage | Performing in public | El Pánico Escénico (Stage Fright) | Catastrophizing. Spotlight ambience |
+| 4 | El Examen Final / The Final Exam | Huge exam hall (40×24, camera scroll) | Exams | La Pluma Roja (The Red Pen) — **two phases**: phase 2 is El Folio en Blanco (The Blank Page) | Perfectionism → blank-mind. Hardest fight before the end; only 2 gems; red ambient tint |
+| 5 | Tu Interior / The Mindscape Core | Mindscape | Acceptance | La Ansiedad (Anxiety) | Not destroyed — understood. Mirror Adaptation mechanic |
+
+- Boss HP curve: 80 → 96 → 112 → 72+68 (two phases) → 150; Dread/Focus ascend likewise.
+- Two-phase mechanic: `phase2` in the boss def; BattleCore swaps stats/attacks at 0 HP
+  and emits `phaseChange`; BattleScene plays a transformation cinematic
+  (`bossPhase2Names/Lines/AttackFlavors` keys).
+- Unlocks: L1→[groundYourself, reframe], L2→[findYourPeople, powerPose],
+  L3→[selfTalk, selfCompassion, believeInYourself] (all usable in the exam),
+  L4→[breakFree].
+- Hero: teen student (Pipoya sprite); dialogue written to also land with an adult
+  at instituto (NPC "La Que Volvió a Estudiar", 34, is the audience's mirror).
+
+## Dialogue principles (evidence brief, 2020–2026 literature)
+
+1. Normalize anxiety as a functional signal; never "calm down", never promise zero fear
+   (inhibitory-learning exposure, Craske). Mentor line: "You don't need to feel calm.
+   You need to stay long enough to find out what really happens."
+2. Behavioral experiments over reassurance (Clark & Wells CBT): predict → test → compare.
+   NPCs "El Colega de la Taquilla" and "El Cuaderno de Ideas" run prediction-error logs.
+3. Attention outward ("turn the camera around") — self-focused attention is the fuel.
+4. Exams = preparation + coping (Huntley 2019: CBT + study skills is the strongest combo):
+   retrieval practice ("La Hoja de Práctica"), if-then plans, one long exhale, re-read.
+5. Arousal reappraisal (Jamieson): pounding heart = fuel, not malfunction.
+6. Self-compassion (Neff) and ACT defusion/willingness ("drop the rope").
+7. NO pure positive affirmations (Wood 2009 — backfire risk): `believeInYourself` is
+   evidence-counting, `selfTalk` is an if-then plan, never "I am amazing".
+8. Real-world bridges after each level (SPARX model): sparkClearLines assign a tiny
+   optional real-life quest.
+9. Boss taunts are recognizable cognitive distortions; defeat lines NAME the distortion
+   (implicit psychoeducation). Credits carry a low-key "asking for help is a skill" line.
+
+## Abilities = real techniques (descriptions teach them)
+
+breatheDeep = physiological sigh (Balban 2023) · groundYourself = 5-4-3-2-1 ·
+reframe = defusion + prediction test · selfTalk = implementation intention (If-Then) ·
+selfCompassion = Neff's self-compassion break · believeInYourself = evidence recount ·
+powerPose = posture + arousal relabel · findYourPeople = help-seeking as skill ·
+breakFree = willingness ("drop the rope") · limitBreak (Sin Miedo) unchanged.
+
+## Art (100% free stack, post-LimeZu)
+
+- LimeZu removed entirely (license was non-commercial; site is public).
+- `tiles/school.png`: project-original tileset (generated, 16 cols — see CREDITS.md).
+- Hero + NPCs: Pipoya FREE RPG Character Sprites 32x32 (commercial OK).
+- Bosses/FX/dungeon/stage/overworld: Ansimuz (unchanged). Audio: Junkala + Kenney CC0.
 
 ---
 

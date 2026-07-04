@@ -20,7 +20,8 @@ class BattleCore {
     this.boss = {
       hp: b.hp, maxHp: b.maxHp, dread: b.dread, focus: b.focus,
       dreadMod: 0, focusMod: 0, attacks: b.attacks,
-      statusEffects: [], shattered: false
+      statusEffects: [], shattered: false,
+      phase: 1, phase2: b.phase2 || null
     };
     this.turnCount = 0;
     this.tauntIndex = 0;
@@ -228,6 +229,21 @@ class BattleCore {
     const reduced = Math.max(1, Math.round(dmg - focusDef));
     this.boss.hp = Math.max(0, this.boss.hp - reduced);
     events.push({ type: 'bossDamage', amount: reduced });
+
+    // Two-phase bosses transform instead of dying at the end of phase 1.
+    const boss = this.boss;
+    if (boss.hp <= 0 && boss.phase === 1 && boss.phase2) {
+      const p2 = boss.phase2;
+      boss.phase = 2;
+      boss.hp = p2.hp; boss.maxHp = p2.maxHp;
+      boss.dread = p2.dread; boss.focus = p2.focus;
+      boss.attacks = p2.attacks;
+      // fresh slate: phase-1 debuffs on the boss don't carry over
+      boss.statusEffects = [];
+      boss.dreadMod = 0; boss.focusMod = 0;
+      this.bossLastAttack = -1;
+      events.push({ type: 'phaseChange' });
+    }
   }
 
   // Returns { attackIndex, totalDmg, effect, taunt, defeat, selfWeakened }

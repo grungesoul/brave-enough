@@ -68,10 +68,7 @@ class WorldScene extends Phaser.Scene {
       const npc = this.physics.add.staticSprite(pos.x * T + T / 2, pos.y * T + T / 2, key, 0);
       if (def.tint) npc.setTint(def.tint);
       npc.setDepth(5);
-      if (this.anims.exists(key + '-idle')) {
-        npc.play(key + '-idle');
-        npc.setOrigin(0.5, 0.72); // 16x32 modern sprites: feet on the tile
-      }
+      if (this.anims.exists(key + '-idle')) npc.play(key + '-idle');
       npc.npcIndex = i;
       npc.talked = false;
       // subtle idle bob so NPCs read as alive
@@ -156,11 +153,12 @@ class WorldScene extends Phaser.Scene {
   createDialogueBox() {
     const w = this.scale.width;
     this.dlg = this.add.container(0, 0).setScrollFactor(0).setDepth(100).setVisible(false);
-    const box = this.add.rectangle(w / 2, 270, w - 20, 84, 0x101024, 0.94).setStrokeStyle(2, 0xffd700);
+    const box = this.add.nineslice(w / 2, 270, 'ui-panel', 0, w - 20, 84, 5, 5, 5, 5).setAlpha(0.96);
+    const edge = this.add.rectangle(w / 2, 270, w - 20, 84).setStrokeStyle(1, 0xffd700, 0.85);
     this.dlgSpeaker = this.add.text(20, 234, '', txtStyle(7, '#ffd700'));
     this.dlgText = this.add.text(20, 250, '', txtStyle(7, '#f0eee0', { wordWrap: { width: w - 44 }, lineSpacing: 5 }));
     this.dlgHint = this.add.text(w - 16, 302, '▼', txtStyle(7, '#8899bb')).setOrigin(1);
-    this.dlg.add([box, this.dlgSpeaker, this.dlgText, this.dlgHint]);
+    this.dlg.add([box, edge, this.dlgSpeaker, this.dlgText, this.dlgHint]);
   }
 
   tryTalk(npc, fromClick = false) {

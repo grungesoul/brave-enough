@@ -1,33 +1,19 @@
-// Structural level data ported from the original game.js LEVELS.
-// All display text (intros, NPC lines, taunts, defeat lines, flavors) lives in
-// translations.js and is looked up by level index — only numbers, ids and
-// asset keys live here. Boss stats are the "easier difficulty" values.
+// Structural level data — redesigned "in crescendo" arc (social → academic):
+//   1 El Primer Día (hallway, El Cotilleo)
+//   2 El Trabajo en Grupo (classroom+library, El Foco)
+//   3 La Presentación (stage, El Pánico Escénico)
+//   4 El Examen Final (exam hall, La Pluma Roja — two phases)
+//   5 Tu Interior (mindscape, La Ansiedad)
+// All display text lives in translations.js and is looked up by level index —
+// only numbers, ids and asset keys live here. Boss stats are the "easier
+// difficulty" values. A boss with `phase2` swaps stats/attacks mid-fight
+// instead of dying (see BattleCore.dealDamageToBoss).
 'use strict';
 
 const LEVELS = [
   {
-    id: 1,
-    tilesetKey: 'interiors', // classroom
-    accent: 0xb8cc60, bossColor: '#CC2222',
-    npcs: [
-      { name: 'The Anxious Echo', calmRestore: 0, cpRestore: 0, sprite: 'alex', tint: 0x9999bb },
-      { name: 'The Error Monitor', calmRestore: 0, cpRestore: 0, sprite: 'npc-robot' },
-      { name: 'The Kind Note', calmRestore: 10, cpRestore: 0, sprite: 'amelia' }
-    ],
-    boss: {
-      spriteKey: 'boss-pluma-roja', tint: 0xff5555,
-      hp: 84, maxHp: 84, dread: 13, focus: 10,
-      attacks: [
-        { dmgMin: 9, dmgMax: 13, effect: null },
-        { dmgMin: 6, dmgMax: 6, effect: 'marked' },
-        { dmgMin: 15, dmgMax: 19, effect: null, hpThreshold: 40 }
-      ]
-    },
-    newAbilities: ['reframe', 'groundYourself']
-  },
-  {
-    id: 2,
-    tilesetKey: 'interiors', // hallway
+    id: 1, // El Primer Día — hallway
+    tilesetKey: 'school',
     accent: 0x3d3050, bossColor: '#7B2FBE',
     npcs: [
       { name: 'The Huddle', calmRestore: 0, cpRestore: 0, sprite: 'bob', tint: 0x666688 },
@@ -36,38 +22,38 @@ const LEVELS = [
     ],
     boss: {
       spriteKey: 'boss-cotilleo', tint: 0xbb88ff,
-      hp: 98, maxHp: 98, dread: 16, focus: 12,
+      hp: 80, maxHp: 80, dread: 12, focus: 9,
       attacks: [
-        { dmgMin: 11, dmgMax: 15, effect: 'rattled' },
-        { dmgMin: 15, dmgMax: 21, effect: null },
-        { dmgMin: 18, dmgMax: 24, effect: 'focusDown', hpThreshold: 50 }
+        { dmgMin: 8, dmgMax: 12, effect: 'rattled' },
+        { dmgMin: 11, dmgMax: 15, effect: null },
+        { dmgMin: 14, dmgMax: 18, effect: 'focusDown', hpThreshold: 40 }
       ]
     },
-    newAbilities: ['selfTalk', 'findYourPeople']
+    newAbilities: ['groundYourself', 'reframe']
   },
   {
-    id: 3,
-    tilesetKey: 'overworld', // sports field
-    accent: 0xffd166, bossColor: '#FF8C42',
+    id: 2, // El Trabajo en Grupo — classroom + library corner
+    tilesetKey: 'school',
+    accent: 0xb8cc60, bossColor: '#FFE9A0',
     npcs: [
-      { name: 'The Benchwarmer', calmRestore: 0, cpRestore: 0, sprite: 'bob' },
-      { name: 'The Whistle', calmRestore: 0, cpRestore: 0, sprite: 'npc-robot' },
-      { name: 'The Forgotten Trophy', calmRestore: 10, cpRestore: 0, sprite: 'amelia', tint: 0xffdd88 }
+      { name: 'The Quiet Groupmate', calmRestore: 0, cpRestore: 0, sprite: 'alex', tint: 0x9999bb },
+      { name: 'The Idea Notebook', calmRestore: 0, cpRestore: 0, sprite: 'npc-robot' },
+      { name: 'The Returning Student', calmRestore: 10, cpRestore: 5, sprite: 'amelia' }
     ],
     boss: {
       spriteKey: 'boss-foco', tint: 0xffffff, static: true,
-      hp: 108, maxHp: 108, dread: 18, focus: 14,
+      hp: 96, maxHp: 96, dread: 15, focus: 12,
       attacks: [
-        { dmgMin: 13, dmgMax: 18, effect: 'scrutinized' },
-        { dmgMin: 16, dmgMax: 22, effect: null },
-        { dmgMin: 21, dmgMax: 27, effect: 'overexposed', hpThreshold: 55 }
+        { dmgMin: 10, dmgMax: 14, effect: 'scrutinized' },
+        { dmgMin: 13, dmgMax: 18, effect: null },
+        { dmgMin: 17, dmgMax: 22, effect: 'overexposed', hpThreshold: 48 }
       ]
     },
-    newAbilities: ['selfCompassion', 'believeInYourself', 'powerPose']
+    newAbilities: ['findYourPeople', 'powerPose']
   },
   {
-    id: 4,
-    tilesetKey: 'stage', // the stage
+    id: 3, // La Presentación — the stage
+    tilesetKey: 'stage',
     accent: 0xc9a84c, bossColor: '#C8E6F5',
     npcs: [
       { name: 'The Actor in the Wings', calmRestore: 0, cpRestore: 0, sprite: 'alex', tint: 0xccccff },
@@ -76,18 +62,48 @@ const LEVELS = [
     ],
     boss: {
       spriteKey: 'boss-panico', tint: 0xaaddff,
-      hp: 119, maxHp: 119, dread: 21, focus: 16,
+      hp: 112, maxHp: 112, dread: 18, focus: 15,
       attacks: [
         { dmgMin: 12, dmgMax: 16, effect: 'frozen' },
-        { dmgMin: 16, dmgMax: 22, effect: 'blankMind' },
-        { dmgMin: 22, dmgMax: 28, effect: 'silenced', hpThreshold: 60 }
+        { dmgMin: 15, dmgMax: 21, effect: 'blankMind' },
+        { dmgMin: 20, dmgMax: 26, effect: 'silenced', hpThreshold: 56 }
       ]
+    },
+    newAbilities: ['selfTalk', 'selfCompassion', 'believeInYourself']
+  },
+  {
+    id: 4, // El Examen Final — exam hall, two-phase boss
+    tilesetKey: 'school',
+    accent: 0xcc3333, bossColor: '#CC2222',
+    npcs: [
+      { name: 'The Front-Row Student', calmRestore: 0, cpRestore: 0, sprite: 'alex', tint: 0x9999bb },
+      { name: 'The Practice Sheet', calmRestore: 0, cpRestore: 10, sprite: 'npc-robot' },
+      { name: 'The Kind Note', calmRestore: 12, cpRestore: 0, sprite: 'amelia' }
+    ],
+    boss: {
+      spriteKey: 'boss-pluma-roja', tint: 0xff5555,
+      hp: 72, maxHp: 72, dread: 21, focus: 16,
+      attacks: [
+        { dmgMin: 13, dmgMax: 17, effect: 'marked' },
+        { dmgMin: 16, dmgMax: 22, effect: null },
+        { dmgMin: 21, dmgMax: 27, effect: 'rattled', hpThreshold: 36 }
+      ],
+      // Phase 2 — "El Folio en Blanco": the pen runs dry, the page takes over.
+      phase2: {
+        tint: 0xf0f0ff,
+        hp: 68, maxHp: 68, dread: 24, focus: 18,
+        attacks: [
+          { dmgMin: 14, dmgMax: 18, effect: 'blankMind' },
+          { dmgMin: 17, dmgMax: 23, effect: 'frozen' },
+          { dmgMin: 23, dmgMax: 29, effect: 'doubt', hpThreshold: 34 }
+        ]
+      }
     },
     newAbilities: ['breakFree']
   },
   {
-    id: 5,
-    tilesetKey: 'dungeon', // the mindscape core
+    id: 5, // Tu Interior — the mindscape core
+    tilesetKey: 'dungeon',
     accent: 0x00c2b5, bossColor: '#8800FF',
     npcs: [
       { name: 'The Memory', calmRestore: 15, cpRestore: 20, sprite: 'amelia', tint: 0x88ffee },
@@ -95,12 +111,12 @@ const LEVELS = [
     ],
     boss: {
       spriteKey: 'boss-ansiedad', tint: 0xaa66ff,
-      hp: 140, maxHp: 140, dread: 24, focus: 20,
+      hp: 150, maxHp: 150, dread: 25, focus: 20,
       attacks: [
         { dmgMin: 15, dmgMax: 19, effect: 'whatIf' },
         { dmgMin: 18, dmgMax: 24, effect: 'doubt' },
-        { dmgMin: 10, dmgMax: 13, hits: 4, effect: null, hpThreshold: 80 },
-        { dmgMin: 26, dmgMax: 33, effect: 'mirrorBreak', hpThreshold: 30, selfWeaken: true }
+        { dmgMin: 10, dmgMax: 13, hits: 4, effect: null, hpThreshold: 85 },
+        { dmgMin: 26, dmgMax: 33, effect: 'mirrorBreak', hpThreshold: 32, selfWeaken: true }
       ]
     },
     newAbilities: []
