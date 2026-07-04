@@ -5,13 +5,14 @@ All assets are free packs used with attribution. Thank you to these artists!
 ## Pixel Art
 
 - **Ansimuz (Luis Zuno)** — https://ansimuz.itch.io — "use in any project, commercial or personal"
-  - TinyRPG pack: NPC character sheets (`sprites/npc-guy.png`, `npc-girl.png`, `npc-robot.png`), boss battle sprites (`boss-*.png`), Overworld + Town + Dungeon tilesets (`tiles/overworld.png`, `town.png`, `dungeon.png`), parallax forest (`ui/parallax-*.png`)
+  - TinyRPG pack: NPC character sheets (`sprites/npc-guy.png`, `npc-girl.png`), boss battle sprites (`boss-*.png`), Overworld + Town + Dungeon tilesets (`tiles/overworld.png`, `town.png`, `dungeon.png`), parallax forest (`ui/parallax-*.png`)
   - Explosions and Magic pack: all battle FX (`fx/*.png`)
   - Stage tileset + gems (`tiles/stage.png`, `sprites/gems.png`)
 - **Pipoya** — https://pipoya.itch.io/pipoya-free-rpg-character-sprites-32x32 — free, commercial OK, no credit required (credited anyway!)
   - Hero + student/teacher NPCs (`sprites/pipoya/*.png`, 32x32, 3x4 sheets: down/left/right/up)
 - **Project-original** — drawn for this game (script: make_school_tiles.py), same license as the project
   - School interior tileset (`tiles/school.png`, 16 cols: floors/walls row 0; desks, chalkboard, lockers, bench, shelf, rug rows 1-3)
+  - Object NPCs: notebook, mic, practice sheet (`sprites/npc-notebook.png`, `npc-mic.png`, `npc-sheet.png`)
 - **pixel-boy & AAA (Ninja Adventure)** — https://pixel-boy.itch.io/ninja-adventure-asset-pack — CC0
   - Dark UI nine-slice panel (`ui/panel-dark.png`, 16×16, 5px corners) for dialogue boxes and battle menu
 
@@ -38,7 +39,7 @@ All assets are free packs used with attribution. Thank you to these artists!
 | sprites/pipoya/*.png | 96×128 | 32×32 | 3×4 grid (3-frame walk × 4 dir rows: down, left, right, up) |
 | sprites/npc-guy.png | 128×96 | 32×32 | 4×3 grid (4-frame walk × 3 dir rows) |
 | sprites/npc-girl.png | 128×96 | 32×32 | 4×3 grid |
-| sprites/npc-robot.png | 80×16 | 16×16 | 5 (walk front) |
+| sprites/npc-notebook/mic/sheet.png | 16×24 | 16×24 | 1 (static object NPCs, project-original) |
 | sprites/boss-pluma-roja.png | 275×93 | 55×93 | 5 |
 | sprites/boss-cotilleo.png | 560×128 | 112×128 | 5 |
 | sprites/boss-foco.png | 80×80 | 80×80 | 1 (static) |

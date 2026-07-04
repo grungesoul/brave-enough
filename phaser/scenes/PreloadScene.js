@@ -11,7 +11,6 @@ const SPRITESHEETS = [
   ['bob', 'assets/sprites/pipoya/bob.png', 32, 32],
   ['npc-guy', 'assets/sprites/npc-guy.png', 32, 32],
   ['npc-girl', 'assets/sprites/npc-girl.png', 32, 32],
-  ['npc-robot', 'assets/sprites/npc-robot.png', 16, 16],
   ['boss-pluma-roja', 'assets/sprites/boss-pluma-roja.png', 55, 93],
   ['boss-cotilleo', 'assets/sprites/boss-cotilleo.png', 112, 128],
   ['boss-panico', 'assets/sprites/boss-panico.png', 101, 98],
@@ -34,6 +33,10 @@ const IMAGES = [
   ['tiles-dungeon', 'assets/tiles/dungeon.png'],
   ['tiles-stage', 'assets/tiles/stage.png'],
   ['tiles-school', 'assets/tiles/school.png'],
+  // project-original interactable objects (16x24, single frame)
+  ['npc-notebook', 'assets/sprites/npc-notebook.png'],
+  ['npc-mic', 'assets/sprites/npc-mic.png'],
+  ['npc-sheet', 'assets/sprites/npc-sheet.png'],
   ['ui-panel', 'assets/ui/panel-dark.png'],
   ['parallax-back', 'assets/ui/parallax-back.png'],
   ['parallax-middle', 'assets/ui/parallax-middle.png'],
@@ -54,9 +57,11 @@ class PreloadScene extends Phaser.Scene {
     this.add.text(w / 2, h / 2 - 24, 'CARGANDO...', txtStyle(8, '#f0eee0')).setOrigin(0.5);
     this.load.on('progress', p => { bar.width = 200 * p; });
 
+    // bump AV when any image changes — browsers cache PNGs by URL
+    const AV = '?av=2';
     SPRITESHEETS.forEach(([key, url, fw, fh]) =>
-      this.load.spritesheet(key, url, { frameWidth: fw, frameHeight: fh }));
-    IMAGES.forEach(([key, url]) => this.load.image(key, url));
+      this.load.spritesheet(key, url + AV, { frameWidth: fw, frameHeight: fh }));
+    IMAGES.forEach(([key, url]) => this.load.image(key, url + AV));
     MUSIC_KEYS.forEach(k =>
       this.load.audio('music-' + k, ['assets/audio/music/' + k + '.ogg', 'assets/audio/music/' + k + '.m4a']));
     SFX_KEYS.forEach(k => this.load.audio('sfx-' + k, ['assets/audio/sfx/' + k + '.ogg']));
@@ -78,7 +83,6 @@ class PreloadScene extends Phaser.Scene {
       this.anims.create({ key: key + '-up', frames: this.anims.generateFrameNumbers(key, { start: 8, end: 11 }), frameRate: 8, repeat: -1 });
       this.anims.create({ key: key + '-idle', frames: [{ key, frame: 0 }], frameRate: 1 });
     }
-    this.anims.create({ key: 'npc-robot-walk', frames: this.anims.generateFrameNumbers('npc-robot', { start: 0, end: 4 }), frameRate: 6, repeat: -1 });
 
     // Boss idle anims
     const bossAnims = [

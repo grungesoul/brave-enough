@@ -37,7 +37,7 @@ const LEVELS = [
     accent: 0xb8cc60, bossColor: '#FFE9A0',
     npcs: [
       { name: 'The Quiet Groupmate', calmRestore: 0, cpRestore: 0, sprite: 'alex', tint: 0x9999bb },
-      { name: 'The Idea Notebook', calmRestore: 0, cpRestore: 0, sprite: 'npc-robot' },
+      { name: 'The Idea Notebook', calmRestore: 0, cpRestore: 0, sprite: 'npc-notebook' },
       { name: 'The Returning Student', calmRestore: 10, cpRestore: 5, sprite: 'amelia' }
     ],
     boss: {
@@ -57,7 +57,7 @@ const LEVELS = [
     accent: 0xc9a84c, bossColor: '#C8E6F5',
     npcs: [
       { name: 'The Actor in the Wings', calmRestore: 0, cpRestore: 0, sprite: 'alex', tint: 0xccccff },
-      { name: 'The Empty Mic', calmRestore: 10, cpRestore: 15, sprite: 'npc-robot' },
+      { name: 'The Empty Mic', calmRestore: 10, cpRestore: 15, sprite: 'npc-mic' },
       { name: 'The Director\'s Note', calmRestore: 12, cpRestore: 0, sprite: 'amelia' }
     ],
     boss: {
@@ -77,7 +77,7 @@ const LEVELS = [
     accent: 0xcc3333, bossColor: '#CC2222',
     npcs: [
       { name: 'The Front-Row Student', calmRestore: 0, cpRestore: 0, sprite: 'alex', tint: 0x9999bb },
-      { name: 'The Practice Sheet', calmRestore: 0, cpRestore: 10, sprite: 'npc-robot' },
+      { name: 'The Practice Sheet', calmRestore: 0, cpRestore: 10, sprite: 'npc-sheet' },
       { name: 'The Kind Note', calmRestore: 12, cpRestore: 0, sprite: 'amelia' }
     ],
     boss: {
