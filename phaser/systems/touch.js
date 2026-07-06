@@ -113,6 +113,24 @@ const TouchControls = (() => {
   // Block long-press context menus on the controls
   root.addEventListener('contextmenu', e => e.preventDefault());
 
+  // ── Rotate-to-landscape recommendation (portrait only, CSS-gated) ──
+  // Full-screen overlay shown while the device is in portrait; hides on
+  // rotation automatically, or stays hidden for the session if dismissed.
+  const lang = (typeof SaveSystem !== 'undefined' && (SaveSystem.load() || {}).lang) || 'es';
+  const rot = document.createElement('div');
+  rot.id = 'tc-rotate';
+  rot.innerHTML =
+    '<div class="tc-phone"></div>' +
+    '<h2>' + TRANSLATIONS.t(lang, 'rotateTitle') + '</h2>' +
+    '<p>' + TRANSLATIONS.t(lang, 'rotateBody') + '</p>' +
+    '<button id="tc-rotate-skip">' + TRANSLATIONS.t(lang, 'rotateSkip') + '</button>';
+  document.body.appendChild(rot);
+  // Tap anywhere on the overlay dismisses it (the button is just the visual cue)
+  rot.addEventListener('pointerdown', e => {
+    e.preventDefault(); // no ghost click on whatever sits underneath
+    document.body.classList.add('tc-rotate-off');
+  });
+
   // ── Hidden text field for NameEntry: opens the native soft keyboard ──
   // Invisible band positioned over the canvas name area; the game canvas
   // keeps rendering the typed name, this field just captures the input.
