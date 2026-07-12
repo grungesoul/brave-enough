@@ -12,9 +12,10 @@ All assets are free packs used with attribution. Thank you to these artists!
   - Hero + student/teacher NPCs (`sprites/pipoya/*.png`, 32x32, 3x4 sheets: down/left/right/up)
 - **Project-original** — drawn for this game (script: make_school_tiles.py), same license as the project
   - School interior tileset (`tiles/school.png`, 16 cols: floors/walls row 0; desks, chalkboard, lockers, bench, shelf, rug rows 1-3)
-  - Object NPCs: notebook, mic, practice sheet (`sprites/npc-notebook.png`, `npc-mic.png`, `npc-sheet.png`)
+  - Object NPCs: notebook, mic, practice sheet, mirror (`sprites/npc-notebook.png`, `npc-mic.png`, `npc-sheet.png`, `npc-mirror.png`)
 - **pixel-boy & AAA (Ninja Adventure)** — https://pixel-boy.itch.io/ninja-adventure-asset-pack — CC0
   - Dark UI nine-slice panel (`ui/panel-dark.png`, 16×16, 5px corners) for dialogue boxes and battle menu
+  - Environment FX for the HD-2D pass: god rays (`fx/Raylight.png`, 216×102) and fog (`fx/Fog.png`, 320×180)
 
 ## Audio
 

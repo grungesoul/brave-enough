@@ -65,6 +65,55 @@ breakFree = willingness ("drop the rope") · limitBreak (Sin Miedo) unchanged.
 - Hero + NPCs: Pipoya FREE RPG Character Sprites 32x32 (commercial OK).
 - Bosses/FX/dungeon/stage/overworld: Ansimuz (unchanged). Audio: Junkala + Kenney CC0.
 
+## HD-2D presentation layer (July 2026 — "último step up")
+
+All code, built on Phaser 3.90's built-in FX (WebGL-only; graceful no-op on Canvas).
+Helpers live in `phaser/systems/fx.js` (HD2D.*); per-level parameters in the map
+defs (`grade`, `rays`, `lights`, `motes`, `fog` in data/maps.js).
+
+- **Camera grade per level**: ColorMatrix (contrast+saturate+brightness lift — Phaser's
+  `contrast()` darkens hard, always compensate with `brightness(~1.15+)`) added BEFORE
+  Vignette. L1/L2 warm morning; L3 hard theatrical (brightness 1.22); L4 desaturated
+  red; L5 violet hue-drift (brightness 1.35).
+- **Diorama framing**: small maps are centered in the viewport (WorldScene camera
+  bounds offset) so the vignette focuses the map, not dead space.
+- **God rays**: NinjaAdventure `Raylight.png` (CC0), ADD blend, alpha-breathing tweens
+  (windows L1/L2, stage shaft L3). **Fog**: `Fog.png` tileSprite (L5 + battle depth).
+- **PointLights** (no Light2D pipeline): window pools, stage spot, crystal glow.
+- **Particle motes** via generated 2px texture: dust (L1/L2), stage dust (L3),
+  sparse embers (L4), violet upward drift (L5).
+- **Battles**: 3-layer tinted parallax silhouettes + fog + bloom'd glow; camera
+  tiltshift (diorama blur); boss rim glow via `preFX.addGlow` (phase 2 recolors it);
+  grounding shadow ellipses; letterbox bars on boss intro + phase change.
+- Sprite shadows in exploration (ellipse under hero/NPCs; hero's follows in update).
+
+## Story spine (July 2026 — narrative step up)
+
+- **Concrete want**: title narration states the stakes — pass this course or start
+  over from zero, again (adult-coded, teen-compatible).
+- **ES title is TIENES MADERA** (payoff of the L5 defeat line + credits); EN stays
+  Brave Enough.
+- **Recurring characters** (same sprites, arcs across levels):
+  adam = Locker Friend (L1 bet game) → "La Silla de Al Lado" (L4, keeps betting,
+  saves you the seat) → quoted by a crystal in L5.
+  alex = Quiet Groupmate (L2 "next one I say badly") → Actor in the Wings (L3 —
+  he kept the promise; the audition WAS the next one).
+  amelia = Returning Student, 34 (L2) → author of L4's Kind Note ("I passed this
+  exam terrified") → quoted in L5.
+- **Antagonist presence before L5**: each L1–L4 boss defeat ends with a whisper
+  inward to Anxiety ("They're coming... Your turn now.").
+- **Climax twist (L4 phase 2)**: El Folio en Blanco erases the friend — "the seat
+  beside yours was always empty" — and the defeat lines restore him. Anxiety's
+  second lie is "you are alone", not just "you will fail".
+- **L5 personalization**: Anxiety's first taunt is a FUNCTION of the player name
+  (translations bossTaunts[4][0]; resolved in BattleScene.showDialogue).
+- **Subtlety rule**: each technique has ONE didactic home — the ability description.
+  NPCs live the technique instead of teaching it (locker friend bets in-scene, the
+  notebook is a found object, the mic compares the heartbeat to a song kicking in,
+  the practice sheet reports someone smiling at their failures). Arousal reappraisal
+  is taught once (powerPose desc + L3 quest), no longer 5×.
+- Exam-hall staging: the red ambient tint eases slightly for every NPC you talk to.
+
 ---
 
 ## TABLE OF CONTENTS

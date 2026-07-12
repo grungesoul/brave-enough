@@ -1,7 +1,9 @@
 // ============================================================
-// BRAVE ENOUGH — translations.js
+// BRAVE ENOUGH / TIENES MADERA — translations.js
 // Full EN/ES bilingual translation table
-// Spanish: authentic Gen-Z Latin American, emotionally sincere
+// Spanish: España peninsular (Gen-Z neutro), emotionally sincere
+// Boss taunt arrays may contain FUNCTIONS of the player name —
+// BattleScene.showDialogue resolves them (L5 personalization).
 // ============================================================
 
 'use strict';
@@ -26,6 +28,7 @@ const TRANSLATIONS = {
       'Every night, the fear comes.',
       'The new people tomorrow. The group tomorrow.',
       'The exam that decides everything, circled in red on the calendar.',
+      'Pass, and you move on. Fail, and it\'s back to square one. Again.',
       'You\'ve been carrying this for a long time.',
       'Tonight, finally, you walk through it.'
     ],
@@ -128,7 +131,7 @@ const TRANSLATIONS = {
       3: [
         'The exam hall. Desks in rows that seem to go on forever.',
         'On every desk, a red pen. Waiting.',
-        'Your heart is loud. Good — that\'s blood and oxygen reporting for duty.',
+        'One chair has your name on it. Beside it, another with a friend\'s name.',
         'You prepared for this. Walk in.'
       ],
       4: [
@@ -149,7 +152,7 @@ const TRANSLATIONS = {
       [
         '"The pen is dry. Did you think that was the end?"',
         '"I\'m what comes after: the empty page. The mind gone white."',
-        '"No more corrections. Now there is nothing at all."'
+        '"Look at the seat beside yours. Empty. Nobody came here with you. Nobody ever did."'
       ],
       null
     ],
@@ -159,7 +162,7 @@ const TRANSLATIONS = {
       ['The Huddle', 'The Locker Friend', 'The Window Reflection'],
       ['The Quiet Groupmate', 'The Idea Notebook', 'The Returning Student'],
       ['The Actor in the Wings', 'The Empty Mic', 'The Director\'s Note'],
-      ['The Front-Row Student', 'The Practice Sheet', 'The Kind Note'],
+      ['The Seat Beside Yours', 'The Practice Sheet', 'The Kind Note'],
       ['The Memory', 'The Spark'],
     ],
 
@@ -189,9 +192,9 @@ const TRANSLATIONS = {
         '"You studied, didn\'t you? Doesn\'t matter. I always find something to cross out."',
         '"Perfect, or nothing. Those are the only two grades I give."'
       ],
-      // Level 5 — Anxiety
+      // Level 5 — Anxiety (functions of the player name — it KNOWS you)
       [
-        '"I know every move you\'re going to make. I AM you."',
+        (name) => `"${name}. I know how you sound before you speak in a hallway. I was there."`,
         '"All this bravery — it\'s just another performance, isn\'t it? Another thing to fail at."',
         '"I\'m the reason you survived this long. Without me, who keeps you safe?"'
       ],
@@ -199,29 +202,34 @@ const TRANSLATIONS = {
 
     // ── Boss defeat lines (per level) ────────────────────
     bossDefeatLines: [
-      // Level 1 — The Whisper: names the mind-reading trap
+      // Level 1 — The Whisper: names the mind-reading trap (+ whisper inward)
       [
         '"...You checked. You actually talked to them."',
         '"I only ever worked while you were guessing what people think. That guessing game — that was me."',
-        '"Nobody can read minds. Not even me. Especially not me."'
+        '"Nobody can read minds. Not even me. Especially not me."',
+        '(Coming apart, it whispers inward: "They\'re coming. And this time they don\'t stop.")'
       ],
       // Level 2 — The Spotlight: names the spotlight effect
       [
         '"I made you feel like the whole room was a camera pointed at you."',
         '"But here\'s my secret: everyone\'s busy starring in their own film. They barely have footage of you."',
-        '"Turn the camera around. The room is just a room."'
+        '"Turn the camera around. The room is just a room."',
+        '(The light dies down, murmuring: "Did you see that? Still walking. Headed for you.")'
       ],
       // Level 3 — Stage Fright
       [
         '"The stage was mine. This was my stage first."',
         '"I\'m the one who made you rehearse. And rehearse. Because if you rehearsed enough, maybe it would be okay."',
-        '"All this time. I was just scared too."'
+        '"All this time. I was just scared too."',
+        '(The curtain falls. Very quietly: "It wasn\'t enough for them. They want to reach the bottom.")'
       ],
-      // Level 4 — The Red Pen / The Blank Page: perfectionism, named
+      // Level 4 — The Red Pen / The Blank Page: perfectionism, named (+ the chair was a lie)
       [
         '"...You breathed. You re-read the question. You came back."',
         '"I always told you it had to be perfect or it was nothing. That was the lie."',
-        '"You prepared, and you kept writing while I screamed. That\'s what prepared actually means."'
+        '"The empty chair was a lie too. Look. Still there, saving your seat."',
+        '"You prepared, and you kept writing while I screamed. That\'s what prepared actually means."',
+        '(The page dissolves: "They don\'t need me anymore. Your turn now.")'
       ],
       // Level 5 — Anxiety
       [
@@ -257,10 +265,10 @@ const TRANSLATIONS = {
 
     // ── Spark intro lines per level ───────────────────────
     sparkIntros: [
-      'New hallway, new faces. Your mind will spend all day guessing what they think of you. Guesses aren\'t facts. Let\'s go check.',
+      'New hallway, new faces. Your head will be forecasting all day. Forecasts aren\'t news. Walk, and let\'s see which ones come true.',
       'A group is just a few people as unsure as you, sitting closer together. Pull up the chair — that\'s the whole first step.',
       'I know this is a hard one. Doing it, and being seen doing it. But look at the spotlight — it\'s waiting for you, not hunting you.',
-      'This is the big one. So remember: you trained for this. A pounding heart is your body showing up to help. Let it.',
+      'This is the big one. I\'m not here to calm you down — I\'m here to remind you you\'ve already won three rooms. Walk in wearing whatever you\'re feeling.',
       'You built this place. Every room we crossed. Not because you wanted to — because you were surviving. But you\'re not just surviving anymore.',
     ],
 
@@ -333,8 +341,8 @@ const TRANSLATIONS = {
       ],
       l1n3: [
         'You catch yourself in the window glass, checking how you look. Again.',
-        'Your mind has been filming you from the inside all morning.',
-        'Try turning the camera around: the hallway, the posters, the faces. Nobody is filming you.',
+        'Behind your reflection, through the glass: the yard, two kids kicking something around, someone sprinting in late.',
+        'Nobody out there is looking this way.',
         'The one still walking — that\'s you too.'
       ],
       // Level 2 — The Group Project (classroom + library)
@@ -345,10 +353,10 @@ const TRANSLATIONS = {
         '"Okay. Next round, I say it badly. Out loud. Watch me."'
       ],
       l2n2: [
-        '"Experiment log, entry 14: subject predicted the group would laugh at their idea. Stated probability: 90%."',
-        '"Observed outcome: two nods. One \'good point\'. Zero laughter."',
-        '"Prediction error: 90 points. Conclusion: the forecaster is broken, not the subject."',
-        '"...One experiment slot still open. It has your name on it."'
+        'A notebook, left open. Someone wrote: "they\'ll laugh, guaranteed. 90%."',
+        'Below it, in much calmer handwriting: "two nodded. One said good point."',
+        'After that there\'s a blank page.',
+        'Whoever it is doesn\'t know yet what they\'ll bet tomorrow.'
       ],
       l2n3: [
         '"Thirty-four. Yeah, I know — the oldest one in the class. I came back to finish what I left half done."',
@@ -358,14 +366,15 @@ const TRANSLATIONS = {
       ],
       // Level 3 — The Presentation (stage)
       l3n1: [
-        '"Every night. Every night I think I\'m going to go blank."',
-        '"And every night I step into the spotlight and say my lines anyway."',
-        '"The trick isn\'t waiting for the fear to pass. It\'s walking out wearing it."'
+        '"Hey. Remember me? The group project. I said next time I\'d say it badly. Well — this is the next time."',
+        '"Every night I think I\'m going to go blank. And every night I step into the light and say my lines anyway."',
+        '"The trick isn\'t waiting for the fear to pass. It\'s walking out wearing it."',
+        '"You watched me practise on a classroom. Now watch me on a stage."'
       ],
       l3n2: [
         'You step up to the mic, right at the edge of the spotlight.',
-        'Your heart is hammering. That\'s not a malfunction — that\'s your body shipping oxygen to your brain.',
-        'The same engine runs fear and excitement. You get to pick the label.',
+        'Your heart is pounding, hard and fast — the way it does right before a song you love kicks in.',
+        'Funny thing: it\'s the same beat as always. Only this time, you walked toward it.',
         'Sometimes reaching the mic is the whole speech.'
       ],
       l3n3: [
@@ -376,26 +385,27 @@ const TRANSLATIONS = {
       ],
       // Level 4 — The Final Exam (exam hall)
       l4n1: [
-        '"I sit in the front row. I used to think I was the only one whose hands shake when the exams come out."',
-        '"Then I looked around. Half the room breathes like they\'re about to dive into cold water."',
-        '"Shaking hands can still write. I\'ve checked. Every single time."'
+        '"Hey! Remember me? Locker guy, first day. Still betting."',
+        '"This morning my head gave me a 95% chance I bomb this thing. Came anyway. Let\'s see who wins."',
+        '"Some days I do lose the bet, you know. Those days exist. But losing is better with company."',
+        '"I\'m saving you the seat beside mine."'
       ],
       l4n2: [
-        '"I am a practice test. I am not graded. That is the entire point of me."',
-        '"Every question you get wrong with me is one the real exam loses forever."',
-        '"Quiz yourself before the exam quizzes you."',
-        '"...Practice complete. The real one has fewer surprises now."'
+        '"Someone used me this morning. Missed three questions. I watched them smile."',
+        '"Because every miss with me is one the real exam can never spring on them again."',
+        '"There are sheets left. In case you\'d like to do your failing here first."'
       ],
       l4n3: [
-        'A note on the desk, in handwriting you almost recognize:',
+        'A note on the desk. Now you know exactly whose handwriting this is:',
         '"You don\'t need to feel calm to do this. You need to do it with whatever you\'re feeling."',
         '"If your mind goes blank: one long breath out, re-read the question, start with any piece you know."',
-        '"— someone who passed this exam terrified"'
+        '"— the one from the group project, the seat beside yours. I passed this exam terrified."'
       ],
-      // Level 5 — The Mindscape
+      // Level 5 — The Mindscape (the crystals quote the people from the way here)
       l5n1: [
-        '"You were never as alone as it felt."',
-        '"Look at the crystals: each one glows with someone who helped you. And you let them in."',
+        '"Look at the crystals. This one glows with \'I\'m saving you the seat beside mine.\'"',
+        '"That one: \'I passed this exam terrified.\' The far one, softer: \'this is the next time.\'"',
+        '"You were never as alone as it felt. And you\'re the one who let them in."',
         '"That\'s brave too."'
       ],
       l5n2: [
@@ -466,7 +476,7 @@ const TRANSLATIONS = {
   // ════════════════════════════════════════════════════════
   es: {
     // ── UI ────────────────────────────────────────────────
-    gameTitle: 'ERES MÁS FUERTE',
+    gameTitle: 'TIENES MADERA',
     subtitle: 'Un viaje hacia dentro',
     tagline: '"No hace falta dejar de tener miedo. Solo hay que seguir."',
     pressStart: '— PULSA ENTER O HAZ CLIC PARA EMPEZAR —',
@@ -483,6 +493,7 @@ const TRANSLATIONS = {
       'El miedo vuelve cada noche.',
       'La gente nueva de mañana. El grupo de mañana.',
       'El examen que lo decide todo, marcado en rojo en el calendario.',
+      'Si apruebas, sigues adelante. Si no, vuelta a empezar de cero. Otra vez.',
       'Llevas un tiempo cargando con esto.',
       'Esta noche, por fin, lo atraviesas.'
     ],
@@ -585,7 +596,7 @@ const TRANSLATIONS = {
       3: [
         'El aula grande de los exámenes. Filas de pupitres que no parecen acabarse.',
         'Sobre cada pupitre, un boli rojo. Esperando.',
-        'El corazón te va fuerte. Bien — eso es sangre y oxígeno presentándose a trabajar.',
+        'Hay una silla con tu nombre. Y al lado, otra con el nombre de un amigo.',
         'Te lo has preparado. Entra.'
       ],
       4: [
@@ -606,7 +617,7 @@ const TRANSLATIONS = {
       [
         '"La pluma se ha quedado sin tinta. ¿Creías que eso era el final?"',
         '"Yo soy lo que viene después: el folio vacío. La mente en blanco."',
-        '"Ya no hay correcciones. Ahora no hay nada de nada."'
+        '"Mira la silla de al lado. Vacía. Aquí no ha venido nadie contigo. Nunca vino nadie."'
       ],
       null
     ],
@@ -616,7 +627,7 @@ const TRANSLATIONS = {
       ['El Corrillo', 'El Colega de la Taquilla', 'El Reflejo de la Ventana'],
       ['El Compañero Callado', 'El Cuaderno de Ideas', 'La Que Volvió a Estudiar'],
       ['El Actor entre Bambalinas', 'El Micro Vacío', 'La Nota del Director'],
-      ['El de Primera Fila', 'La Hoja de Práctica', 'La Nota Amable'],
+      ['La Silla de Al Lado', 'La Hoja de Práctica', 'La Nota Amable'],
       ['El Recuerdo', 'La Chispa'],
     ],
 
@@ -646,9 +657,9 @@ const TRANSLATIONS = {
         '"Has estudiado, ¿a que sí? Da igual. Siempre encuentro algo que tachar."',
         '"Perfecto, o nada. Son las dos únicas notas que pongo."'
       ],
-      // Level 5 — La Ansiedad
+      // Level 5 — La Ansiedad (funciones del nombre del jugador — te CONOCE)
       [
-        '"Sé cada movimiento que vas a hacer antes de que lo hagas. SOY tú."',
+        (name) => `"${name}. Sé cómo te suena la voz por dentro antes de hablar en un pasillo. Yo estaba allí."`,
         '"Toda esta valentía — no es más que otra actuación, ¿verdad? Otra oportunidad de fastidiarla."',
         '"Soy la razón por la que llevas tanto tiempo aguantando. Sin mí, ¿quién te protege?"'
       ],
@@ -656,29 +667,34 @@ const TRANSLATIONS = {
 
     // ── Boss defeat lines ─────────────────────────────────
     bossDefeatLines: [
-      // Level 1 — El Cotilleo: nombra la trampa de leer la mente
+      // Level 1 — El Cotilleo: nombra la trampa de leer la mente (+ susurro hacia dentro)
       [
         '"...Lo has comprobado. Has ido y les has hablado."',
         '"Yo solo funcionaba mientras adivinabas lo que piensa la gente. Ese juego de adivinar — ese era yo."',
-        '"Nadie sabe leer mentes. Ni siquiera yo. Sobre todo yo."'
+        '"Nadie sabe leer mentes. Ni siquiera yo. Sobre todo yo."',
+        '(Al deshacerse, susurra hacia dentro: "Ya viene. Y esta vez no se para.")'
       ],
       // Level 2 — El Foco: nombra el efecto foco
       [
         '"Te hacía sentir que la clase entera era una cámara apuntándote."',
         '"Pero te cuento mi secreto: cada uno va de protagonista en su propia película. De ti apenas tienen metraje."',
-        '"Gira la cámara. La clase es solo una clase."'
+        '"Gira la cámara. La clase es solo una clase."',
+        '(La luz se apaga murmurando: "¿Lo has visto? Sigue andando. Va hacia ti.")'
       ],
       // Level 3 — El Pánico Escénico
       [
         '"Este escenario era mío. Fue mío primero."',
         '"Fui yo quien te hizo ensayar. Y ensayar otra vez. Porque si ensayabas suficiente, quizás estaría bien."',
-        '"Todo este tiempo. Yo también tenía miedo."'
+        '"Todo este tiempo. Yo también tenía miedo."',
+        '(Cae el telón. Muy bajito: "No le ha bastado. Quiere llegar hasta el fondo.")'
       ],
-      // Level 4 — La Pluma Roja / El Folio en Blanco: perfeccionismo, nombrado
+      // Level 4 — La Pluma Roja / El Folio en Blanco: perfeccionismo (+ la silla era mentira)
       [
         '"...Has respirado. Has releído la pregunta. Has vuelto."',
         '"Siempre te dije que o salía perfecto o no valía nada. Esa era la mentira."',
-        '"Te lo preparaste, y seguiste escribiendo mientras yo gritaba. Eso es lo que significa ir preparado."'
+        '"Y lo de la silla vacía también lo era. Mira. Ahí sigue, guardándote el sitio."',
+        '"Te lo preparaste, y seguiste escribiendo mientras yo gritaba. Eso es lo que significa ir preparado."',
+        '(El folio se deshace: "Ya no me necesita a mí. Te toca a ti.")'
       ],
       // Level 5 — La Ansiedad
       [
@@ -714,10 +730,10 @@ const TRANSLATIONS = {
 
     // ── Spark intro lines ─────────────────────────────────
     sparkIntros: [
-      'Pasillo nuevo, caras nuevas. Tu cabeza se va a pasar el día adivinando lo que piensan de ti. Las suposiciones no son hechos. Vamos a comprobarlo.',
+      'Pasillo nuevo, caras nuevas. Tu cabeza va a hacer pronósticos todo el día. Los pronósticos no son noticias. Camina, y vemos cuáles aciertan.',
       'Un grupo es solo gente tan insegura como tú, sentada más junta. Acerca la silla — ese es todo el primer paso.',
       'Sé que este es difícil. Hacerlo, y que te vean hacerlo. Pero mira el foco — te está esperando, no te está cazando.',
-      'Este es el grande. Así que recuerda: te lo has preparado. El corazón a mil es tu cuerpo presentándose a ayudar. Déjale.',
+      'Este es el grande. No vengo a calmarte — vengo a recordarte que ya llevas tres salas ganadas. Entra con lo que sientas puesto.',
       'Todo esto lo construiste tú. Cada sala que hemos cruzado. No porque quisieras — porque sobrevivías. Pero ya no estás solo sobreviviendo.',
     ],
 
@@ -768,9 +784,9 @@ const TRANSLATIONS = {
       'Y una vez es suficiente para saber que puedes hacerlo de nuevo.',
       'No hay meta para ser valiente.',
       'Solo hay hoy, el siguiente paso, y el siguiente respiro.',
-      'Eres más fuerte de lo que crees.'
+      'Tienes madera. Siempre la has tenido.'
     ],
-    victoryBigText: '¡ERES MÁS FUERTE!',
+    victoryBigText: 'TIENES MADERA.',
 
     // ── NPC dialogues ─────────────────────────────────────
     npcs: {
@@ -790,8 +806,8 @@ const TRANSLATIONS = {
       ],
       l1n3: [
         'Te pillas mirándote en el cristal de la ventana. Comprobando qué pinta tienes. Otra vez.',
-        'Tu cabeza lleva toda la mañana grabándote desde dentro.',
-        'Prueba a girar la cámara: el pasillo, los carteles, las caras. Nadie te está grabando a ti.',
+        'Detrás de tu reflejo, al otro lado del cristal: el patio, dos dándole patadas a algo, una que llega tarde corriendo.',
+        'Ahí fuera nadie mira hacia aquí.',
         'El que sigue andando — ese también eres tú.'
       ],
       // Level 2 — El Trabajo en Grupo (aula + biblioteca)
@@ -802,10 +818,10 @@ const TRANSLATIONS = {
         '"Vale. A la siguiente la digo mal. En voz alta. Mírame."'
       ],
       l2n2: [
-        '"Registro de experimentos, entrada 14: el sujeto predijo que el grupo se reiría de su idea. Probabilidad declarada: 90%."',
-        '"Resultado observado: dos asentimientos. Un \'buen apunte\'. Cero risas."',
-        '"Error de predicción: 90 puntos. Conclusión: lo que falla es el pronóstico, no el sujeto."',
-        '"...Queda un hueco libre para otro experimento. Lleva tu nombre."'
+        'Un cuaderno abierto, olvidado. Alguien apuntó: "se van a reír, fijo. 90%".',
+        'Debajo, con una letra mucho más tranquila: "dos han asentido. Uno ha dicho buen apunte".',
+        'Después hay una página en blanco.',
+        'Quien sea, todavía no sabe qué apostará mañana.'
       ],
       l2n3: [
         '"Treinta y cuatro. Sí, ya — la mayor de la clase. Volví para terminar lo que dejé a medias."',
@@ -815,14 +831,15 @@ const TRANSLATIONS = {
       ],
       // Level 3 — La Presentación (escenario)
       l3n1: [
-        '"Cada noche. Cada noche pienso que me voy a quedar en blanco."',
-        '"Y cada noche salgo a la luz del foco y digo mi texto igualmente."',
-        '"El truco no es esperar a que se pase el miedo. Es salir con el miedo puesto."'
+        '"Ey. ¿Te acuerdas de mí? Del trabajo en grupo. Dije que la siguiente la decía mal. Pues la siguiente era esto."',
+        '"Cada noche pienso que me voy a quedar en blanco. Y cada noche salgo a la luz y digo mi texto igualmente."',
+        '"El truco no es esperar a que se pase el miedo. Es salir con el miedo puesto."',
+        '"Me viste ensayar en un aula. Ahora mírame en un escenario."'
       ],
       l3n2: [
         'Te acercas al micro, justo al borde del foco.',
-        'El corazón te martillea. No es una avería — es tu cuerpo mandando oxígeno al cerebro.',
-        'El mismo motor sirve para el miedo y para las ganas. La etiqueta la eliges tú.',
+        'El corazón te golpea fuerte y rápido — como justo antes de que empiece una canción que te encanta.',
+        'Lo curioso es que es el mismo golpe de siempre. Solo que esta vez has venido tú hacia él.',
         'A veces llegar hasta el micro ya es todo el discurso.'
       ],
       l3n3: [
@@ -833,26 +850,27 @@ const TRANSLATIONS = {
       ],
       // Level 4 — El Examen Final (aula grande)
       l4n1: [
-        '"Yo me siento en primera fila. Antes creía que era el único al que le tiemblan las manos cuando reparten los exámenes."',
-        '"Luego miré alrededor. Media clase respira como si fuera a tirarse a una piscina fría."',
-        '"Con las manos temblando también se escribe. Lo tengo comprobado. Todas las veces."'
+        '"¡Ey! ¿Te acuerdas de mí? El de la taquilla, el primer día. Sigo apostando."',
+        '"Esta mañana mi cabeza me daba un 95% de que la palmo en este examen. He venido igualmente. A ver quién gana."',
+        '"Algunos días la apuesta la pierdo yo, ¿eh? Haberlos haylos. Pero se pierde mejor acompañado."',
+        '"Te guardo la silla de al lado."'
       ],
       l4n2: [
-        '"Soy una hoja de práctica. No cuento para nota. Precisamente para eso existo."',
-        '"Cada pregunta que fallas conmigo es una que el examen de verdad pierde para siempre."',
-        '"Ponte a prueba tú antes de que te ponga a prueba el examen."',
-        '"...Práctica completada. Al de verdad le quedan menos sorpresas."'
+        '"Alguien me ha usado esta mañana. Ha fallado tres preguntas. Le he visto sonreír."',
+        '"Porque cada fallo conmigo es uno que el examen de verdad ya no le puede dar."',
+        '"Quedan hojas. Por si quieres venir a fallar aquí primero."'
       ],
       l4n3: [
-        'Una nota sobre el pupitre, con una letra que casi reconoces:',
+        'Una nota sobre el pupitre. Ahora sí sabes de quién es esta letra:',
         '"No necesitas sentirte tranquilo para hacer esto. Necesitas hacerlo con lo que estés sintiendo."',
         '"Si te quedas en blanco: una exhalación larga, relee la pregunta, empieza por cualquier trozo que sepas."',
-        '"— alguien que aprobó este examen muerto de miedo"'
+        '"— la del grupo, la de la silla de al lado. Yo aprobé este examen muerta de miedo."'
       ],
-      // Level 5 — Tu Interior
+      // Level 5 — Tu Interior (los cristales citan a la gente del camino)
       l5n1: [
-        '"Nunca estuviste tan solo como parecía."',
-        '"Mira los cristales: en cada uno brilla alguien que te echó un cable. Y los dejaste entrar tú."',
+        '"Mira los cristales. En este brilla un \'te guardo la silla de al lado\'."',
+        '"En aquel: \'yo aprobé este examen muerta de miedo\'. Y en el del fondo, más bajito: \'la siguiente era esto\'."',
+        '"Nunca estuviste tan solo como parecía. Y los dejaste entrar tú."',
         '"Eso también es ser valiente."'
       ],
       l5n2: [
@@ -866,7 +884,7 @@ const TRANSLATIONS = {
 
     // ── Credits ───────────────────────────────────────────
     creditsLines: [
-      { text: 'ERES MÁS FUERTE', style: 'title', color: '#FFD700' },
+      { text: 'TIENES MADERA', style: 'title', color: '#FFD700' },
       { text: '', style: 'blank' },
       { text: 'Un viaje hacia dentro', style: 'sub', color: '#00C2B5' },
       { text: '', style: 'blank' },

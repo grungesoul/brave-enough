@@ -18,6 +18,13 @@ class TitleScene extends Phaser.Scene {
     this.titleText = this.add.text(w / 2, 70, T_(this.game, 'gameTitle'), txtStyle(24, '#ffd700', { stroke: '#000', strokeThickness: 6 })).setOrigin(0.5);
     this.subText = this.add.text(w / 2, 100, T_(this.game, 'subtitle'), txtStyle(8, '#f0eee0')).setOrigin(0.5);
 
+    // HD-2D dressing: cinematic grade + soft bloom on the title
+    HD2D.grade(this, { contrast: 0.12, saturate: 0.15, vignette: [0.5, 0.5, 0.85, 0.32], tiltshift: [0.35, 0.5, 0.1, 0.5, 0.5, 0.5] });
+    if (HD2D.isWebGL(this)) {
+      this.titleText.preFX.setPadding(8);
+      this.titleText.preFX.addGlow(0xffd700, 2, 0);
+    }
+
     // Cycling narration lines
     this.narrIdx = 0;
     this.narrText = this.add.text(w / 2, 160, '', txtStyle(7, '#aabbee', { align: 'center', wordWrap: { width: 400 } })).setOrigin(0.5);

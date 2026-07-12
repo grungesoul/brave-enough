@@ -18,11 +18,30 @@ class BattleScene extends Phaser.Scene {
     this.hero = Object.assign(freshHero(this.game), { cp: wh.cp, calm: wh.calm });
     this.core = new BattleCore(this.hero, this.levelIndex);
 
-    // ── Backdrop ──
+    // ── Backdrop: layered dreamscape (HD-2D depth: silhouettes + fog + grade) ──
     this.cameras.main.setBackgroundColor('#0d0a16');
-    const glow = this.add.ellipse(w / 2, 110, 300, 130, Phaser.Display.Color.HexStringToColor(this.level.bossColor).color, 0.10);
+    const bossCol = Phaser.Display.Color.HexStringToColor(this.level.bossColor).color;
+    this.bgLayers = [];
+    for (const [key, speed, tint] of [
+      ['parallax-back', 0.10, 0x342c50], ['parallax-middle', 0.25, 0x221c38], ['parallax-front', 0.45, 0x141020]
+    ]) {
+      const ts = this.add.tileSprite(w / 2, h / 2, w / 2, 160, key).setScale(2).setTint(tint);
+      ts.scrollSpeed = speed;
+      this.bgLayers.push(ts);
+    }
+    this.add.rectangle(0, 0, w, h, 0x0d0a16, 0.45).setOrigin(0); // push layers back
+    this.bgFog = this.add.tileSprite(w / 2, 150, w, 180, 'fx-fog')
+      .setAlpha(0.08).setTint(bossCol).setBlendMode(Phaser.BlendModes.ADD);
+    const glow = this.add.ellipse(w / 2, 110, 300, 130, bossCol, 0.10);
     this.tweens.add({ targets: glow, scaleX: 1.15, scaleY: 1.1, duration: 1600, yoyo: true, repeat: -1, ease: 'sine.inOut' });
     this.add.rectangle(0, 200, w, 2, 0x333355).setOrigin(0);
+    if (HD2D.isWebGL(this)) glow.postFX.addBloom(0xffffff, 1, 1, 1, 1.2, 4);
+    // cinematic camera grade + diorama blur (tuned for 480x320)
+    HD2D.grade(this, {
+      contrast: 0.14, saturate: 0.12,
+      vignette: [0.5, 0.45, 0.72, 0.42],
+      tiltshift: [0.4, 0.6, 0.1, 0.6, 0.6, 0.6]
+    });
 
     // ── Boss ──
     const b = this.level.boss;
@@ -38,8 +57,17 @@ class BattleScene extends Phaser.Scene {
       this.tweens.add({ targets: this.bossSprite, alpha: 0.72, scaleX: 1.06, scaleY: 1.06, duration: 900, yoyo: true, repeat: -1, ease: 'sine.inOut' });
     }
     this.bossHome = { x: w / 2 + 60, y: 120 };
+    // grounding shadow + rim glow (HD-2D presence)
+    this.add.ellipse(this.bossHome.x, 120 + this.bossSprite.displayHeight * 0.42,
+      this.bossSprite.displayWidth * 0.6, 10, 0x000000, 0.3);
+    this.bossSprite.setDepth(1);
+    if (HD2D.isWebGL(this)) {
+      this.bossSprite.preFX.setPadding(10);
+      this.bossGlowFX = this.bossSprite.preFX.addGlow(bossCol, 2.5, 0);
+    }
 
     // ── Hero (back turned, bottom-left) ──
+    this.add.ellipse(90, 199, 26, 8, 0x000000, 0.3);
     this.heroSprite = this.add.sprite(90, 175, 'hero', 10).setScale(2.2); // up-facing row (Pipoya row 4)
     this.heroHome = { x: 90, y: 175 };
 
@@ -78,6 +106,7 @@ class BattleScene extends Phaser.Scene {
     this.dialogueIdx = 0;
     this.typing = false;
     const bossName = this.bossName();
+    const lbox = HD2D.letterbox(this);
     const banner = this.add.container(0, 0).setDepth(90);
     const bband = this.add.rectangle(w / 2, 100, w, 40, 0x000000, 0.75);
     const btext = this.add.text(w + 200, 100, bossName.toUpperCase(), txtStyle(14, this.level.bossColor, { stroke: '#000', strokeThickness: 4 })).setOrigin(0.5);
@@ -86,7 +115,7 @@ class BattleScene extends Phaser.Scene {
     this.tweens.add({ targets: btext, x: w / 2, duration: 500, ease: 'cubic.out' });
     this.tweens.add({ targets: banner, alpha: 0, delay: 1600, duration: 400, onComplete: () => banner.destroy() });
     this.time.delayedCall(2100, () => {
-      this.showDialogue(bossName, [this.taunts()[0]], () => this.setPlayerTurn());
+      this.showDialogue(bossName, [this.taunts()[0]], () => { lbox.hide(); this.setPlayerTurn(); });
     });
     this.refreshHud();
     this.refreshMenu();
@@ -398,6 +427,8 @@ class BattleScene extends Phaser.Scene {
     const p2 = this.level.boss.phase2 || {};
     this.bossTint = p2.tint || 0xffffff;
     this.bossSprite.setTint(this.bossTint);
+    if (this.bossGlowFX) this.bossGlowFX.color = this.bossTint;
+    const lbox2 = HD2D.letterbox(this);
     const veil = this.add.rectangle(0, 0, w, h, 0xe8e8f4, 0).setOrigin(0).setDepth(5);
     this.tweens.add({ targets: veil, fillAlpha: 0.15, duration: 900 });
 
@@ -413,7 +444,7 @@ class BattleScene extends Phaser.Scene {
     this.time.delayedCall(2100, () => {
       const lines = (T_(this.game, 'bossPhase2Lines') || [])[this.levelIndex] || ['...'];
       this.refreshHud();
-      this.showDialogue(name2, lines, () => this.bossAct());
+      this.showDialogue(name2, lines, () => { lbox2.hide(); this.bossAct(); });
     });
   }
 
@@ -481,7 +512,9 @@ class BattleScene extends Phaser.Scene {
     this.descText.setVisible(false);
     this.dlg.setVisible(true);
     this.dlgSpeaker.setText(speaker);
-    this.dialogueLines = lines.filter(Boolean);
+    // taunt arrays may hold functions of the player name (L5 knows you)
+    const pname = this.registry.get('playerName') || '...';
+    this.dialogueLines = lines.filter(Boolean).map(l => typeof l === 'function' ? l(pname) : l);
     if (!this.dialogueLines.length) this.dialogueLines = ['...'];
     this.dialogueIdx = 0;
     this.dialogueCb = cb;
@@ -524,6 +557,11 @@ class BattleScene extends Phaser.Scene {
     } else {
       this.typeLine();
     }
+  }
+
+  update(time, dt) {
+    for (const l of this.bgLayers) l.tilePositionX += l.scrollSpeed * dt * 0.02;
+    if (this.bgFog) this.bgFog.tilePositionX += dt * 0.006;
   }
 
   // ── Floating text ──

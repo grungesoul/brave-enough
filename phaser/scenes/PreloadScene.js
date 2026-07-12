@@ -39,6 +39,9 @@ const IMAGES = [
   ['npc-mic', 'assets/sprites/npc-mic.png'],
   ['npc-sheet', 'assets/sprites/npc-sheet.png'],
   ['ui-panel', 'assets/ui/panel-dark.png'],
+  // NinjaAdventure environment FX (CC0) — god rays + mindscape fog
+  ['fx-ray', 'assets/fx/Raylight.png'],
+  ['fx-fog', 'assets/fx/Fog.png'],
   ['parallax-back', 'assets/ui/parallax-back.png'],
   ['parallax-middle', 'assets/ui/parallax-middle.png'],
   ['parallax-front', 'assets/ui/parallax-front.png'],
@@ -69,6 +72,12 @@ class PreloadScene extends Phaser.Scene {
   }
 
   create() {
+    // 2px dot texture for atmospheric particle motes (HD2D.motes)
+    const g = this.make.graphics({ add: false });
+    g.fillStyle(0xffffff, 1).fillRect(0, 0, 2, 2);
+    g.generateTexture('fx-dot', 2, 2);
+    g.destroy();
+
     // Pipoya 32x32 sheets (3x4 grid): rows = down 0-2, left 3-5, right 6-8, up 9-11.
     // '-side' uses the right-facing row; WorldScene flips X for left.
     for (const key of ['hero', 'adam', 'alex', 'amelia', 'bob']) {

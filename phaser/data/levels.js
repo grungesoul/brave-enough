@@ -76,7 +76,8 @@ const LEVELS = [
     tilesetKey: 'school',
     accent: 0xcc3333, bossColor: '#CC2222',
     npcs: [
-      { name: 'The Front-Row Student', calmRestore: 0, cpRestore: 0, sprite: 'alex', tint: 0x9999bb },
+      // The Locker Friend from L1 returns — the seat the Blank Page will "erase"
+      { name: 'The Seat Beside Yours', calmRestore: 0, cpRestore: 5, sprite: 'adam' },
       { name: 'The Practice Sheet', calmRestore: 0, cpRestore: 10, sprite: 'npc-sheet' },
       { name: 'The Kind Note', calmRestore: 12, cpRestore: 0, sprite: 'amelia' }
     ],

@@ -34,8 +34,9 @@ class WorldScene extends Phaser.Scene {
     }
 
     // ── Mood: ambient tint + stage spotlight ──
+    this.ambientRect = null;
     if (mapDef.ambient) {
-      this.add.rectangle(0, 0, mapDef.width * T, mapDef.height * T, mapDef.ambient.color, mapDef.ambient.alpha)
+      this.ambientRect = this.add.rectangle(0, 0, mapDef.width * T, mapDef.height * T, mapDef.ambient.color, mapDef.ambient.alpha)
         .setOrigin(0).setDepth(20);
     }
     if (mapDef.spotlight) {
@@ -43,20 +44,36 @@ class WorldScene extends Phaser.Scene {
       const sx = bt0.x * T + (bt0.w * T) / 2, sy = bt0.y * T + bt0.h * T;
       const spot = this.add.ellipse(sx, sy + 10, 120, 70, 0xffe9a0, 0.22).setDepth(21).setBlendMode(Phaser.BlendModes.ADD);
       this.tweens.add({ targets: spot, scaleX: 1.08, scaleY: 1.05, alpha: 0.3, duration: 1500, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+      if (HD2D.isWebGL(this)) spot.postFX.addBloom(0xffffff, 1, 1, 1, 1.1, 4);
     }
+
+    // ── HD-2D atmosphere: camera grade + rays + light pools + motes + fog ──
+    const mapW0 = mapDef.width * T, mapH0 = mapDef.height * T;
+    HD2D.grade(this, mapDef.grade);
+    (mapDef.rays || []).forEach(r => HD2D.ray(this, r.x, r.y, r));
+    (mapDef.lights || []).forEach(l => HD2D.light(this, l.x, l.y, l.color, l.radius, l.intensity));
+    if (mapDef.motes) HD2D.motes(this, mapW0, mapH0, mapDef.motes);
+    this.fogLayer = mapDef.fog ? HD2D.fog(this, this.scale.width, this.scale.height, mapDef.fog.color, mapDef.fog.alpha) : null;
 
     // ── Player ──
     const spawn = mapDef.playerSpawn;
     this.player = this.physics.add.sprite(spawn.x * T + T / 2, spawn.y * T + T / 2, 'hero', 0);
     this.player.body.setSize(14, 12).setOffset(9, 18); // feet-only collision box
     this.player.setDepth(10);
+    this.playerShadow = HD2D.shadow(this, this.player, 14);
+    this.playerShadow.setDepth(9);
     this.physics.add.collider(this.player, this.groundLayer);
     this.physics.add.collider(this.player, this.propsLayer);
 
     const mapW = mapDef.width * T, mapH = mapDef.height * T;
     this.physics.world.setBounds(0, 0, mapW, mapH);
     this.player.setCollideWorldBounds(true);
-    this.cameras.main.setBounds(0, 0, mapW, mapH);
+    // center small maps in the viewport (diorama framing) — otherwise the
+    // vignette center would fall on the dead space below the map
+    const vw = this.scale.width, vh = this.scale.height;
+    const bx = mapW >= vw ? 0 : -(vw - mapW) / 2;
+    const by = mapH >= vh ? 0 : -(vh - mapH) / 2;
+    this.cameras.main.setBounds(bx, by, Math.max(mapW, vw), Math.max(mapH, vh));
     this.cameras.main.startFollow(this.player, true);
 
     // ── NPCs ──
@@ -73,6 +90,7 @@ class WorldScene extends Phaser.Scene {
       npc.talked = false;
       // subtle idle bob so NPCs read as alive
       this.tweens.add({ targets: npc, y: npc.y - 1, duration: 900 + i * 130, yoyo: true, repeat: -1 });
+      HD2D.shadow(this, npc, 12);
       this.physics.add.collider(this.player, npc);
       this.npcs.push(npc);
       npc.setInteractive({ useHandCursor: true });
@@ -239,6 +257,10 @@ class WorldScene extends Phaser.Scene {
       }
       this.registry.set('worldHero', { ...hero });
       if ((def.calmRestore || def.cpRestore || def.fullRestore)) AudioSystem.sfx(this, 'sfx-heal', 0.6);
+      // exam hall: the red pressure visibly eases with every voice you let in
+      if (this.levelIndex === 3 && this.ambientRect) {
+        this.tweens.add({ targets: this.ambientRect, fillAlpha: Math.max(0.06, this.ambientRect.fillAlpha - 0.06), duration: 1200, ease: 'sine.out' });
+      }
     }
   }
 
@@ -261,6 +283,11 @@ class WorldScene extends Phaser.Scene {
   }
 
   update(time, dt) {
+    if (this.fogLayer) this.fogLayer.tilePositionX += dt * 0.008;
+    if (this.playerShadow) {
+      this.playerShadow.x = this.player.x;
+      this.playerShadow.y = this.player.y + this.player.displayHeight * 0.32;
+    }
     if (this.dialogueActive || this.bossTriggered) {
       this.player.setVelocity(0);
       this.player.anims.play('hero-idle', true);
