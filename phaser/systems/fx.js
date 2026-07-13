@@ -88,6 +88,49 @@ const HD2D = {
     return f;
   },
 
+  // Octopath-style rim light: a faint outer glow that separates a character
+  // sprite from the (blurred, dark) backdrop. Cool white by default.
+  rim(scene, sprite, color, strength) {
+    if (!this.isWebGL(scene)) return null;
+    sprite.preFX.setPadding(6);
+    return sprite.preFX.addGlow(color == null ? 0xdfe8ff : color, strength == null ? 1.4 : strength, 0);
+  },
+
+  // Framed dialogue portrait. mode 'head' crops a LimeZu 16x32 char's face;
+  // mode 'fit' scales any texture/frame to fit the box (bosses, object NPCs).
+  // Returns a container so callers can add it to their dialogue group.
+  portrait(scene, x, y, key, opts = {}) {
+    const size = opts.size || 44;
+    const c = scene.add.container(x, y);
+    const bg = scene.add.nineslice(0, 0, 'ui-panel', 0, size, size, 5, 5, 5, 5).setAlpha(0.98);
+    const edge = scene.add.rectangle(0, 0, size, size).setStrokeStyle(1, opts.edge || 0xffd700, 0.9);
+    c.add([bg, edge]);
+    if (scene.textures.exists(key)) {
+      let spr;
+      if (opts.mode === 'head') {
+        // LimeZu 16x32, front frame 18: the head fills x 1-15, y 8-22
+        // (body starts at y≈22; rows measured with PIL, not guessed)
+        spr = scene.add.sprite(0, 0, key, opts.frame == null ? 18 : opts.frame);
+        spr.setCrop(1, 8, 14, 14);
+        const s = (size - 10) / 14;
+        spr.setScale(s);
+        // visible-rect center is (8,15) in frame coords; sprite center is (8,16)
+        spr.y = 1 * s;
+      } else {
+        // spritesheets take frame 0; plain images use their base frame
+        let frame = opts.frame;
+        if (frame == null && scene.textures.get(key).has('0')) frame = 0;
+        spr = frame == null ? scene.add.sprite(0, 0, key) : scene.add.sprite(0, 0, key, frame);
+        const s = (size - 8) / Math.max(spr.width, spr.height);
+        spr.setScale(s);
+      }
+      if (opts.tint) spr.setTint(opts.tint);
+      // mask overflow: head crops stay inside, fit mode already fits
+      c.add(spr);
+    }
+    return c;
+  },
+
   // Grounding shadow under a sprite. Static placement; caller repositions
   // for moving sprites (see WorldScene.update).
   shadow(scene, target, w) {

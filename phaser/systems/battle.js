@@ -21,7 +21,11 @@ class BattleCore {
       hp: b.hp, maxHp: b.maxHp, dread: b.dread, focus: b.focus,
       dreadMod: 0, focusMod: 0, attacks: b.attacks,
       statusEffects: [], shattered: false,
-      phase: 1, phase2: b.phase2 || null
+      phase: 1, phase2: b.phase2 || null,
+      // Octopath-style break system: hitting a weakness chips the shield;
+      // at 0 the boss BREAKS (skips its turn, takes x1.5 damage) then resets.
+      weaknesses: b.weaknesses || [], shield: b.shield || 0, maxShield: b.shield || 0,
+      revealed: [], broken: false
     };
     this.turnCount = 0;
     this.tauntIndex = 0;
@@ -197,6 +201,21 @@ class BattleCore {
       }
     }
 
+    // Break check: using a weakness technique chips the shield (even the
+    // non-damaging ones — breathing at Anxiety IS the counter to it)
+    const boss = this.boss;
+    if (boss.weaknesses.includes(abilityId)) {
+      if (!boss.revealed.includes(abilityId)) boss.revealed.push(abilityId);
+      if (!boss.broken && boss.shield > 0 && boss.hp > 0) {
+        boss.shield--;
+        events.push({ type: 'weakHit', shield: boss.shield });
+        if (boss.shield === 0) {
+          boss.broken = true;
+          events.push({ type: 'break' });
+        }
+      }
+    }
+
     this.tickBossStatuses();
     this.turnCount++;
     if (abilityId !== 'limitBreak') {
@@ -221,6 +240,7 @@ class BattleCore {
     if (this.mirrorAdaptAbility === abilityId) {
       dmg = Math.floor(dmg * 0.7);
     }
+    if (this.boss.broken) dmg = Math.floor(dmg * 1.5); // break bonus
     return Math.max(1, dmg);
   }
 
@@ -241,6 +261,11 @@ class BattleCore {
       // fresh slate: phase-1 debuffs on the boss don't carry over
       boss.statusEffects = [];
       boss.dreadMod = 0; boss.focusMod = 0;
+      // phase 2 brings its own weaknesses and a fresh shield
+      boss.weaknesses = p2.weaknesses || boss.weaknesses;
+      boss.shield = p2.shield || boss.maxShield;
+      boss.maxShield = boss.shield;
+      boss.revealed = []; boss.broken = false;
       this.bossLastAttack = -1;
       events.push({ type: 'phaseChange' });
     }
@@ -249,6 +274,13 @@ class BattleCore {
   // Returns { attackIndex, totalDmg, effect, taunt, defeat, selfWeakened }
   bossTurn() {
     const boss = this.boss;
+    // Broken boss loses its turn, then recovers its shield
+    if (boss.broken) {
+      boss.broken = false;
+      boss.shield = boss.maxShield;
+      // buff/debuff ticking still happens via afterBossTurn, as on a normal turn
+      return { stunned: true, attackIndex: -1, totalDmg: 0, hits: 0, effect: null, tauntIdx: -1, selfWeaken: false, defeat: false };
+    }
     const attacks = boss.attacks;
     let available = attacks.filter(a => !a.hpThreshold || boss.hp <= a.hpThreshold);
     if (available.length === 0) available = attacks;

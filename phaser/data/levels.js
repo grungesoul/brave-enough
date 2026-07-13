@@ -15,6 +15,8 @@ const LEVELS = [
     id: 1, // El Primer Día — hallway
     tilesetKey: 'school',
     accent: 0x3d3050, bossColor: '#7B2FBE',
+    // battle backdrop: cool morning corridor, warm light through windows
+    battleBg: { sky: '#141a30', back: 0x8fa8e0, middle: 0x5a6ab0, front: 0x2e3468, horizon: 0xbb88ff, rays: true },
     npcs: [
       { name: 'The Huddle', calmRestore: 0, cpRestore: 0, sprite: 'bob', tint: 0x666688 },
       { name: 'The Locker Friend', calmRestore: 0, cpRestore: 5, sprite: 'adam' },
@@ -22,6 +24,10 @@ const LEVELS = [
     ],
     boss: {
       spriteKey: 'boss-cotilleo', tint: 0xbb88ff,
+      // Octopath-style break: weaknesses are always techniques the player
+      // already owns when facing this boss. Gossip crumbles when you breathe
+      // through it and speak up.
+      weaknesses: ['speakUp', 'breatheDeep'], shield: 2,
       hp: 80, maxHp: 80, dread: 12, focus: 9,
       attacks: [
         { dmgMin: 8, dmgMax: 12, effect: 'rattled' },
@@ -35,6 +41,8 @@ const LEVELS = [
     id: 2, // El Trabajo en Grupo — classroom + library corner
     tilesetKey: 'school',
     accent: 0xb8cc60, bossColor: '#FFE9A0',
+    // battle backdrop: warm daylight classroom, harsh spotlight overhead
+    battleBg: { sky: '#26200e', back: 0xe8d9a0, middle: 0xb09a60, front: 0x5f5030, horizon: 0xffe9a0, spot: true },
     npcs: [
       { name: 'The Quiet Groupmate', calmRestore: 0, cpRestore: 0, sprite: 'alex', tint: 0x9999bb },
       { name: 'The Idea Notebook', calmRestore: 0, cpRestore: 0, sprite: 'npc-notebook' },
@@ -42,6 +50,8 @@ const LEVELS = [
     ],
     boss: {
       spriteKey: 'boss-foco', tint: 0xffffff, static: true,
+      // the spotlight loses power when you reframe it and hold your ground
+      weaknesses: ['reframe', 'groundYourself'], shield: 2,
       hp: 96, maxHp: 96, dread: 15, focus: 12,
       attacks: [
         { dmgMin: 10, dmgMax: 14, effect: 'scrutinized' },
@@ -55,6 +65,8 @@ const LEVELS = [
     id: 3, // La Presentación — the stage
     tilesetKey: 'stage',
     accent: 0xc9a84c, bossColor: '#C8E6F5',
+    // battle backdrop: night stage, icy blue wash + a single spotlight
+    battleBg: { sky: '#0c1220', back: 0x5a7ab8, middle: 0x35497a, front: 0x1a2340, horizon: 0xc8e6f5, spot: true },
     npcs: [
       { name: 'The Actor in the Wings', calmRestore: 0, cpRestore: 0, sprite: 'alex', tint: 0xccccff },
       { name: 'The Empty Mic', calmRestore: 10, cpRestore: 15, sprite: 'npc-mic' },
@@ -62,6 +74,8 @@ const LEVELS = [
     ],
     boss: {
       spriteKey: 'boss-panico', tint: 0xaaddff,
+      // stage panic breaks when you stand tall and don't stand alone
+      weaknesses: ['powerPose', 'findYourPeople'], shield: 3,
       hp: 112, maxHp: 112, dread: 18, focus: 15,
       attacks: [
         { dmgMin: 12, dmgMax: 16, effect: 'frozen' },
@@ -75,6 +89,8 @@ const LEVELS = [
     id: 4, // El Examen Final — exam hall, two-phase boss
     tilesetKey: 'school',
     accent: 0xcc3333, bossColor: '#CC2222',
+    // battle backdrop: red-alert exam hall, everything tastes of alarm
+    battleBg: { sky: '#230c10', back: 0xd88a8a, middle: 0x9a4a50, front: 0x4a2028, horizon: 0xff5555, rays: true },
     npcs: [
       // The Locker Friend from L1 returns — the seat the Blank Page will "erase"
       { name: 'The Seat Beside Yours', calmRestore: 0, cpRestore: 5, sprite: 'adam' },
@@ -83,6 +99,8 @@ const LEVELS = [
     ],
     boss: {
       spriteKey: 'boss-pluma-roja', tint: 0xff5555,
+      // the red pen loses its grip when you reframe / forgive the mistake
+      weaknesses: ['reframe', 'selfCompassion'], shield: 3,
       hp: 72, maxHp: 72, dread: 21, focus: 16,
       attacks: [
         { dmgMin: 13, dmgMax: 17, effect: 'marked' },
@@ -92,6 +110,8 @@ const LEVELS = [
       // Phase 2 — "El Folio en Blanco": the pen runs dry, the page takes over.
       phase2: {
         tint: 0xf0f0ff,
+        // the blank page tears when you talk back and believe anyway
+        weaknesses: ['believeInYourself', 'selfTalk'], shield: 2,
         hp: 68, maxHp: 68, dread: 24, focus: 18,
         attacks: [
           { dmgMin: 14, dmgMax: 18, effect: 'blankMind' },
@@ -106,12 +126,16 @@ const LEVELS = [
     id: 5, // Tu Interior — the mindscape core
     tilesetKey: 'dungeon',
     accent: 0x00c2b5, bossColor: '#8800FF',
+    // battle backdrop: deep mindscape purple, heavy fog
+    battleBg: { sky: '#181230', back: 0x9a88d8, middle: 0x6a55aa, front: 0x3c3070, horizon: 0x8800ff, fogHeavy: true },
     npcs: [
       { name: 'The Memory', calmRestore: 15, cpRestore: 20, sprite: 'amelia', tint: 0x88ffee },
       { name: 'The Spark', calmRestore: 50, cpRestore: 100, fullRestore: true, sprite: 'adam', tint: 0xffd700 }
     ],
     boss: {
       spriteKey: 'boss-ansiedad', tint: 0xaa66ff,
+      // anxiety itself: everything you learned, together
+      weaknesses: ['breatheDeep', 'selfCompassion', 'breakFree'], shield: 3,
       hp: 150, maxHp: 150, dread: 25, focus: 20,
       attacks: [
         { dmgMin: 15, dmgMax: 19, effect: 'whatIf' },

@@ -80,7 +80,7 @@ function buildLevel1() {
     gems: [[4, 6], [12, 9], [16, 5], [25, 6]], // gentlest level: 4 gems
     ambient: { color: 0x201030, alpha: 0.12 },
     // HD-2D atmosphere (see systems/fx.js) — morning light through the windows
-    grade: { contrast: 0.08, saturate: 0.12, vignette: [0.5, 0.5, 0.92, 0.26] },
+    grade: { contrast: 0.08, saturate: 0.12, brightness: 1.28, vignette: [0.5, 0.5, 0.92, 0.26], tiltshift: [0.4, 0.7, 0.05, 0.8, 0.8, 0.55] },
     rays: [7, 21, 33].map(c => ({ x: (c + 0.5) * T + 10, y: 26, scale: 0.45 })),
     lights: [7, 13, 21, 27, 33].map(c => ({ x: (c + 0.5) * T, y: 30, color: 0xffe9b0, radius: 55, intensity: 0.07 })),
     motes: { color: 0xfff6d8, frequency: 260 }
@@ -141,7 +141,7 @@ function buildLevel2() {
     ],
     bossTrigger: { x: 14, y: 5, w: 2, h: 1 }, // in front of the chalkboard
     gems: [[3, 16], [18, 11], [24, 16]],
-    grade: { contrast: 0.1, saturate: 0.14, vignette: [0.5, 0.5, 0.88, 0.28] },
+    grade: { contrast: 0.1, saturate: 0.14, brightness: 1.28, vignette: [0.5, 0.5, 0.88, 0.28], tiltshift: [0.4, 0.7, 0.05, 0.8, 0.8, 0.55] },
     rays: [9, 24].map(c => ({ x: (c + 0.5) * T + 10, y: 26, scale: 0.5 })),
     lights: [9, 12, 24, 27].map(c => ({ x: (c + 0.5) * T, y: 30, color: 0xffe9b0, radius: 55, intensity: 0.07 })),
     motes: { color: 0xfff6d8, frequency: 300 }
@@ -180,7 +180,7 @@ function buildLevel3() {
     ambient: { color: 0x050510, alpha: 0.55 },
     spotlight: true,
     // hard theatrical grade: crushed edges, one column of light on the mic
-    grade: { contrast: 0.14, saturate: 0.1, brightness: 1.22, vignette: [0.5, 0.45, 0.7, 0.4] },
+    grade: { contrast: 0.14, saturate: 0.1, brightness: 1.3, vignette: [0.5, 0.45, 0.7, 0.4], tiltshift: [0.4, 0.7, 0.05, 0.8, 0.8, 0.55] },
     rays: [{ x: 264, y: 4, scale: 0.9, alpha: 0.1 }],
     lights: [{ x: 248, y: 100, color: 0xffe9a0, radius: 85, intensity: 0.12 }],
     motes: { color: 0xfff2c0, frequency: 380 }
@@ -237,7 +237,7 @@ function buildLevel4() {
     gems: [[36, 21], [2, 12]], // climax: only 2 gems in the whole hall
     ambient: { color: 0x3a0505, alpha: 0.22 },
     // oppressive: desaturated, closed-in vignette, cold light over the boards
-    grade: { contrast: 0.16, saturate: 0.06, vignette: [0.5, 0.5, 0.72, 0.42] },
+    grade: { contrast: 0.16, saturate: 0.06, brightness: 1.28, vignette: [0.5, 0.5, 0.72, 0.42], tiltshift: [0.4, 0.7, 0.05, 0.8, 0.8, 0.55] },
     lights: [[16, 4], [24, 4]].map(([c, r]) => ({ x: c * T, y: r * T, color: 0xffdddd, radius: 70, intensity: 0.05 })),
     motes: { color: 0xffe0d0, frequency: 520 }
   };
@@ -280,7 +280,7 @@ function buildLevel5() {
     gems: [[15, 13]], // the deepest level: a single gem
     ambient: { color: 0x2a0055, alpha: 0.22 },
     // dreamlike: extra saturation + slight hue drift, fog, crystal glow
-    grade: { contrast: 0.1, saturate: 0.22, hue: 12, brightness: 1.35, vignette: [0.5, 0.5, 0.85, 0.3] },
+    grade: { contrast: 0.1, saturate: 0.22, hue: 12, brightness: 1.42, vignette: [0.5, 0.5, 0.85, 0.3], tiltshift: [0.4, 0.7, 0.05, 0.8, 0.8, 0.55] },
     lights: [[6, 6], [23, 6], [6, 14], [23, 14], [14, 10]].map(([c, r]) =>
       ({ x: (c + 0.5) * T, y: (r + 1) * T, color: 0x88ffee, radius: 60, intensity: 0.25 })),
     motes: { color: 0xcc99ff, frequency: 200, upward: true },

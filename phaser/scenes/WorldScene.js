@@ -58,7 +58,7 @@ class WorldScene extends Phaser.Scene {
     // ── Player ──
     const spawn = mapDef.playerSpawn;
     this.player = this.physics.add.sprite(spawn.x * T + T / 2, spawn.y * T + T / 2, 'hero', 0);
-    this.player.body.setSize(14, 12).setOffset(9, 18); // feet-only collision box
+    this.player.body.setSize(12, 10).setOffset(2, 20); // feet-only collision box (16x32 frame)
     this.player.setDepth(10);
     this.playerShadow = HD2D.shadow(this, this.player, 14);
     this.playerShadow.setDepth(9);
@@ -173,10 +173,21 @@ class WorldScene extends Phaser.Scene {
     this.dlg = this.add.container(0, 0).setScrollFactor(0).setDepth(100).setVisible(false);
     const box = this.add.nineslice(w / 2, 270, 'ui-panel', 0, w - 20, 84, 5, 5, 5, 5).setAlpha(0.96);
     const edge = this.add.rectangle(w / 2, 270, w - 20, 84).setStrokeStyle(1, 0xffd700, 0.85);
-    this.dlgSpeaker = this.add.text(20, 234, '', txtStyle(7, '#ffd700'));
-    this.dlgText = this.add.text(20, 250, '', txtStyle(7, '#f0eee0', { wordWrap: { width: w - 44 }, lineSpacing: 5 }));
+    this.dlgPortrait = null;
+    this.dlgSpeaker = this.add.text(68, 234, '', txtStyle(7, '#ffd700'));
+    this.dlgText = this.add.text(68, 250, '', txtStyle(7, '#f0eee0', { wordWrap: { width: w - 92 }, lineSpacing: 5 }));
     this.dlgHint = this.add.text(w - 16, 302, '▼', txtStyle(7, '#8899bb')).setOrigin(1);
     this.dlg.add([box, edge, this.dlgSpeaker, this.dlgText, this.dlgHint]);
+  }
+
+  setDialoguePortrait(def) {
+    if (this.dlgPortrait) { this.dlgPortrait.destroy(); this.dlgPortrait = null; }
+    if (!def) return;
+    const key = def.sprite || 'npc-guy';
+    const isChar = ['adam', 'alex', 'amelia', 'bob', 'hero'].includes(key);
+    this.dlgPortrait = HD2D.portrait(this, 38, 268, key,
+      { mode: isChar ? 'head' : 'fit', frame: isChar ? 18 : undefined, tint: def.tint, edge: 0xffd700 });
+    this.dlg.add(this.dlgPortrait);
   }
 
   tryTalk(npc, fromClick = false) {
@@ -203,6 +214,7 @@ class WorldScene extends Phaser.Scene {
     const npcNames = T_(this.game, 'npcNames');
     const localized = Array.isArray(npcNames) && npcNames[this.levelIndex] && npcNames[this.levelIndex][npc.npcIndex];
     this.dlgSpeaker.setText(localized || def.name || '???');
+    this.setDialoguePortrait(def);
     this.typeLine();
   }
 

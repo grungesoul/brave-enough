@@ -2,13 +2,19 @@
 
 // Frame sizes verified in assets/CREDITS.md — measured, not guessed.
 const SPRITESHEETS = [
-  // Pipoya FREE RPG Character Sprites 32x32 (96x128 sheets, 3 cols x 4 rows:
-  // rows = down, left, right, up; commercial use OK, no credit required)
-  ['hero', 'assets/sprites/pipoya/hero.png', 32, 32],
-  ['adam', 'assets/sprites/pipoya/adam.png', 32, 32],
-  ['alex', 'assets/sprites/pipoya/alex.png', 32, 32],
-  ['amelia', 'assets/sprites/pipoya/amelia.png', 32, 32],
-  ['bob', 'assets/sprites/pipoya/bob.png', 32, 32],
+  // LimeZu Modern Interiors FREE characters (384x32 sheets, 24 frames of
+  // 16x32: 6-frame runs in order right 0-5, up 6-11, left 12-17, down 18-23;
+  // free version license = non-commercial projects only — this game is free)
+  ['hero', 'assets/sprites/limezu/bob-run.png', 16, 32],
+  ['hero-im', 'assets/sprites/limezu/bob-idle.png', 16, 32],
+  ['adam', 'assets/sprites/limezu/adam-run.png', 16, 32],
+  ['adam-im', 'assets/sprites/limezu/adam-idle.png', 16, 32],
+  ['alex', 'assets/sprites/limezu/alex-run.png', 16, 32],
+  ['alex-im', 'assets/sprites/limezu/alex-idle.png', 16, 32],
+  ['amelia', 'assets/sprites/limezu/amelia-run.png', 16, 32],
+  ['amelia-im', 'assets/sprites/limezu/amelia-idle.png', 16, 32],
+  ['bob', 'assets/sprites/limezu/bob-run.png', 16, 32],
+  ['bob-im', 'assets/sprites/limezu/bob-idle.png', 16, 32],
   ['npc-guy', 'assets/sprites/npc-guy.png', 32, 32],
   ['npc-girl', 'assets/sprites/npc-girl.png', 32, 32],
   ['boss-pluma-roja', 'assets/sprites/boss-pluma-roja.png', 55, 93],
@@ -62,7 +68,7 @@ class PreloadScene extends Phaser.Scene {
     this.load.on('progress', p => { bar.width = 200 * p; });
 
     // bump AV when any image changes — browsers cache PNGs by URL
-    const AV = '?av=3';
+    const AV = '?av=4';
     SPRITESHEETS.forEach(([key, url, fw, fh]) =>
       this.load.spritesheet(key, url + AV, { frameWidth: fw, frameHeight: fh }));
     IMAGES.forEach(([key, url]) => this.load.image(key, url + AV));
@@ -78,13 +84,16 @@ class PreloadScene extends Phaser.Scene {
     g.generateTexture('fx-dot', 2, 2);
     g.destroy();
 
-    // Pipoya 32x32 sheets (3x4 grid): rows = down 0-2, left 3-5, right 6-8, up 9-11.
-    // '-side' uses the right-facing row; WorldScene flips X for left.
+    // LimeZu 16x32 run sheets: 6-frame runs — right 0-5, up 6-11, left 12-17,
+    // down 18-23. '-side' uses the right run; WorldScene flips X for left.
+    // '-idle' / '-idle-up' breathe from the matching key+'-im' idle sheet.
     for (const key of ['hero', 'adam', 'alex', 'amelia', 'bob']) {
-      this.anims.create({ key: key + '-down', frames: this.anims.generateFrameNumbers(key, { start: 0, end: 2 }), frameRate: 8, repeat: -1 });
-      this.anims.create({ key: key + '-side', frames: this.anims.generateFrameNumbers(key, { start: 6, end: 8 }), frameRate: 8, repeat: -1 });
-      this.anims.create({ key: key + '-up', frames: this.anims.generateFrameNumbers(key, { start: 9, end: 11 }), frameRate: 8, repeat: -1 });
-      this.anims.create({ key: key + '-idle', frames: [{ key, frame: 1 }], frameRate: 1 });
+      this.anims.create({ key: key + '-down', frames: this.anims.generateFrameNumbers(key, { start: 18, end: 23 }), frameRate: 10, repeat: -1 });
+      this.anims.create({ key: key + '-side', frames: this.anims.generateFrameNumbers(key, { start: 0, end: 5 }), frameRate: 10, repeat: -1 });
+      this.anims.create({ key: key + '-up', frames: this.anims.generateFrameNumbers(key, { start: 6, end: 11 }), frameRate: 10, repeat: -1 });
+      this.anims.create({ key: key + '-idle', frames: this.anims.generateFrameNumbers(key + '-im', { start: 18, end: 23 }), frameRate: 5, repeat: -1 });
+      this.anims.create({ key: key + '-idle-up', frames: this.anims.generateFrameNumbers(key + '-im', { start: 6, end: 11 }), frameRate: 5, repeat: -1 });
+      this.anims.create({ key: key + '-idle-side', frames: this.anims.generateFrameNumbers(key + '-im', { start: 12, end: 17 }), frameRate: 5, repeat: -1 }); // left-facing (battle: heroes right, enemy left)
     }
     // Ansimuz 32x32 4x3 sheets: row0=down, row1=side, row2=up
     for (const key of ['npc-guy', 'npc-girl']) {

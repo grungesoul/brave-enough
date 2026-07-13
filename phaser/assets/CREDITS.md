@@ -8,8 +8,10 @@ All assets are free packs used with attribution. Thank you to these artists!
   - TinyRPG pack: NPC character sheets (`sprites/npc-guy.png`, `npc-girl.png`), boss battle sprites (`boss-*.png`), Overworld + Town + Dungeon tilesets (`tiles/overworld.png`, `town.png`, `dungeon.png`), parallax forest (`ui/parallax-*.png`)
   - Explosions and Magic pack: all battle FX (`fx/*.png`)
   - Stage tileset + gems (`tiles/stage.png`, `sprites/gems.png`)
+- **LimeZu** — https://limezu.itch.io/moderninteriors — Modern Interiors FREE version; license: NON-COMMERCIAL projects only (this game is free; buy the 1.50$ full pack if that ever changes)
+  - Hero (Bob) + student NPCs Adam/Alex/Amelia (`sprites/limezu/*-run.png`, `*-idle.png`)
 - **Pipoya** — https://pipoya.itch.io/pipoya-free-rpg-character-sprites-32x32 — free, commercial OK, no credit required (credited anyway!)
-  - Hero + student/teacher NPCs (`sprites/pipoya/*.png`, 32x32, 3x4 sheets: down/left/right/up)
+  - Former hero/NPC sprites (`sprites/pipoya/*.png`, 32x32) — no longer loaded, kept for reference
 - **Project-original** — drawn for this game (script: make_school_tiles.py), same license as the project
   - School interior tileset (`tiles/school.png`, 16 cols: floors/walls row 0; desks, chalkboard, lockers, bench, shelf, rug rows 1-3)
   - Object NPCs: notebook, mic, practice sheet, mirror (`sprites/npc-notebook.png`, `npc-mic.png`, `npc-sheet.png`, `npc-mirror.png`)
@@ -37,7 +39,9 @@ All assets are free packs used with attribution. Thank you to these artists!
 
 | File | Sheet | Frame | Frames |
 |---|---|---|---|
-| sprites/pipoya/*.png | 96×128 | 32×32 | 3×4 grid (3-frame walk × 4 dir rows: down, left, right, up) |
+| sprites/limezu/*-run.png | 384×32 | 16×32 | 24 frames: 6-frame run × 4 dirs in order right, up, left, down |
+| sprites/limezu/*-idle.png | 384×32 | 16×32 | 24 frames: 6-frame idle × 4 dirs in order right, up, left, down |
+| sprites/pipoya/*.png | 96×128 | 32×32 | UNUSED — 3×4 grid (3-frame walk × 4 dir rows: down, left, right, up) |
 | sprites/npc-guy.png | 128×96 | 32×32 | 4×3 grid (4-frame walk × 3 dir rows) |
 | sprites/npc-girl.png | 128×96 | 32×32 | 4×3 grid |
 | sprites/npc-notebook/mic/sheet.png | 16×24 | 16×24 | 1 (static object NPCs, project-original) |
