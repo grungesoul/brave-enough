@@ -19,7 +19,13 @@ class NameEntryScene extends Phaser.Scene {
     this.confirmText = this.add.text(w / 2, 220, '', txtStyle(8, '#ffd700', { align: 'center', wordWrap: { width: 420 } })).setOrigin(0.5);
     this.refresh();
 
-    this.input.keyboard.on('keydown', ev => this.onKey(ev));
+    // Typing listens to the DOM directly: Phaser's keyboard queue re-processes
+    // buffered events when the game loop is starved (low FPS / throttled tab),
+    // which replayed keystrokes and scrambled the name. One DOM event = one
+    // handler call, always.
+    this._nativeKey = ev => this.onKey(ev);
+    window.addEventListener('keydown', this._nativeKey);
+    this.events.once('shutdown', () => window.removeEventListener('keydown', this._nativeKey));
     this.input.on('pointerdown', () => { if (this.confirmed) this.proceed(); });
 
     // Mobile: an invisible input band over the name row opens the native
