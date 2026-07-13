@@ -76,10 +76,18 @@ class TitleScene extends Phaser.Scene {
   startGame() {
     if (this.started) return;
     this.started = true;
-    AudioSystem.playMusic(this, 'music-title');
-    AudioSystem.sfx(this, 'sfx-menu-select');
+    // Never let audio-unlock quirks kill the transition: the scene change is
+    // the one thing that MUST happen on this gesture.
+    try {
+      AudioSystem.playMusic(this, 'music-title');
+      AudioSystem.sfx(this, 'sfx-menu-select');
+    } catch (e) { /* audio can fail silently; the game must still start */ }
     this.cameras.main.fadeOut(400, 0, 0, 0);
     this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('NameEntry'));
+    // belt & braces: if the fade event never fires, jump anyway
+    this.time.delayedCall(800, () => {
+      if (this.scene.isActive('Title')) this.scene.start('NameEntry');
+    });
   }
 
   update() {
